@@ -22,7 +22,7 @@ namespace Levels.Rooms
         public int Height => bottom - top + 1;
         public int Area => Width * Height;
 
-        public Room() : this(new RectInt(0, 0, 0, 0)) { }
+        public Room() : this(RectIntExtensions.zero) { }
 
 
         public Room(RectInt r)

@@ -69,6 +69,7 @@ namespace Levels.Rooms
                 this.weight = weight;
                 this.region = region;
             }
+            
 
             public float weightAtLevel => (region == Dungeon.region || region == 0) ? weight : 0;
             public bool usableInRegion => (region == Dungeon.region || region == 0);

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Utils
 {
-     public static class EnumExtensions
+    public static class EnumExtensions
     {
         public static TAttribute GetAttribute<TAttribute>(this Enum value)
             where TAttribute : Attribute
