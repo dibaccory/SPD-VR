@@ -25,7 +25,7 @@ namespace Levels.Painters
 
         public static void Set(Level level, int x, int y, int value)
         {
-            Set(level, x + y * level.Width(), value);
+            Set(level, x + y * level.width, value);
             
         }
 
@@ -37,7 +37,7 @@ namespace Levels.Painters
         public static void Fill(Level level, int x, int y, int w, int h, int value)
         {
 
-            int width = level.Width();
+            int width = level.width;
 
             int pos = y * width + x;
             for (int i = y; i < y + h; i++, pos += width)
@@ -46,19 +46,19 @@ namespace Levels.Painters
             }
         }
 
-        public static void Fill(Level level, RectInt rect, int value)
+        public static void Fill(Level level, Room r, int value)
         {
-            Fill(level, rect.x, rect.y, rect.width, rect.height, value);
+            Fill(level, r.left, r.top, r.Width, r.Height, value);
         }
 
-        public static void Fill(Level level, RectInt rect, int m, int value)
+        public static void Fill(Level level, Room r, int m, int value)
         {
-            Fill(level, rect.x + m, rect.y + m, rect.width - m * 2, rect.height - m * 2, value);
+            Fill(level, r.left + m, r.top + m, r.Width - m * 2, r.Height - m * 2, value);
         }
 
-        public static void Fill(Level level, RectInt rect, int l, int t, int r, int b, int value)
+        public static void Fill(Level level, Room room, int l, int t, int r, int b, int value)
         {
-            Fill(level, rect.x + l, rect.y + t, rect.width - (l + r), rect.height - (t + b), value);
+            Fill(level, room.left + l, room.top + t, room.Width - (l + r), room.Height - (t + b), value);
         }
     }
 }

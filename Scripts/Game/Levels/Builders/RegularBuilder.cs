@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Levels.Rooms;
+using Levels.Rooms.Connection;
+using Levels.Rooms.Standard;
+using Levels.Rooms.Secret;
+using Levels.Rooms.Special;
 using Utils;
 using Unity.VisualScripting;
 using UnityEditor;

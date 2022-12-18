@@ -317,7 +317,7 @@ namespace Levels.Rooms
 
         // **** Painter Logic ****
 
-        public abstract void paint(Level level);
+        public abstract void Paint(Level level);
 
         //whether or not a painter can make its own modifications to a specific point
         public bool CanPlaceWater(Vector2 p)

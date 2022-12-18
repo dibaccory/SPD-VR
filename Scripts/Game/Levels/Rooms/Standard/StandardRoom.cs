@@ -6,7 +6,7 @@ using Utils;
 using DungeonInstance;
 
 
-namespace Levels.Rooms
+namespace Levels.Rooms.Standard
 {
 
     public abstract class StandardRoom : Room
