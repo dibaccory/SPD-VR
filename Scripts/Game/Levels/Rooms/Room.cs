@@ -145,7 +145,7 @@ namespace Levels.Rooms
             int px = n * (-1 * (from.x - right < 0 ? -1 : 1) * (from.x % right == 0 ? 1 : 0));
             int py = n * (-1 * (from.y - bottom < 0 ? -1 : 1) * (from.x % bottom == 0 ? 1 : 0));
 
-            return new Vector2Int(from.x + px, from.y + py);
+            return new(from.x + px, from.y + py);
         }
 
         public Vector2Int Random()
@@ -358,7 +358,7 @@ namespace Levels.Rooms
         }
 
         //whether or not a painter can place a trap at a specific point
-        public bool CanPlaceTrap(Vector2Int p)
+        public virtual bool CanPlaceTrap(Vector2Int p)
         {
             return true;
         }

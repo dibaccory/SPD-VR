@@ -208,5 +208,32 @@ namespace Levels
             CreateMobs();
         }
 
+        public int MobLimit() => 0;
+        //TODO Mob stuff later
+        //public int MobCount()
+        //{
+        //    float count = 0;
+        //    for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
+        //    {
+        //        if (mob.alignment == Char.Alignment.ENEMY && !mob.properties().contains(Char.Property.MINIBOSS))
+        //        {
+        //            count += mob.spawningWeight();
+        //        }
+        //    }
+        //    return Math.round(count);
+        //}
+
+        //public Mob findMob(int pos)
+        //{
+        //    for (Mob mob : mobs)
+        //    {
+        //        if (mob.pos == pos)
+        //        {
+        //            return mob;
+        //        }
+        //    }
+        //    return null;
+        //}
+
     }
 }

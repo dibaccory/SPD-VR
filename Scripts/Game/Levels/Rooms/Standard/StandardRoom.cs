@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using UnityEngine;
 using Utils;
 using TileInfo;
 using DungeonInstance;
@@ -137,10 +138,10 @@ namespace Levels.Rooms.Standard
             return (StandardRoom)Activator.CreateInstance(chosenRoomClass);
         }
 
-        public override bool CanMerge(Level l, Vector2Int p, int mergeTerrain)
+        public bool CanMerge(Level l, Vector2Int p, int mergeTerrain)
         {
-            int cell = l.PointToCell(PointInside(p, 1));
-            return !Terrain.TileHasFlag(l.map[cell], TileFlags.Solid);
+            int cell = l.XYToCell(PointInside(p, 1));
+            return !TileInfo.Terrain.TileHasFlag(l.map[cell], TileFlags.Solid);
         }
 
 

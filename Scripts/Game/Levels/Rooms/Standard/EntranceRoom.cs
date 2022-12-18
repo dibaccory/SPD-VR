@@ -2,7 +2,7 @@
 using UnityEngine;
 using Utils;
 using Levels;
-using Terrain;
+using TileInfo;
 using Levels.Painters;
 using Levels.Rooms;
 using DungeonInstance;
@@ -15,11 +15,11 @@ namespace Levels.Rooms.Standard
 		public override int MinHeight =>  Math.Max(base.MinHeight, 5);
 
 
-		public override bool CanMerge(Level l, Vector2Int p, int mergeTerrain) => false;
+		public bool CanMerge(Level l, Vector2Int p, int mergeTerrain) => false;
 
 		public override bool CanPlaceTrap(Vector2Int p) =>
-			(Dungeon.depth == 1) ? false : base.CanPlaceTrap(p);
-			
+			Dungeon.depth != 1 && base.CanPlaceTrap(p);
+
 		public override void Paint(Level level )
 		{
 
@@ -30,19 +30,22 @@ namespace Levels.Rooms.Standard
 				door.Set( Room.Door.Type.Regular );
 			}
 
-			int entrance;
-			do
-			{
-				entrance = level.PointToCell(random(2));
-			} while (level.FindMob(entrance) != null);
+			int entrance = level.XYToCell(Random(2));
+			//TODO REACTIVATE WHEN MOBS SPAWN
+			//do
+			//{
+			//	entrance = level.XYToCell(Random(2));
+			//} while (level.FindMob(entrance) != null);
 			Painter.Set( level, entrance, Tile.Entrance );
 
-			if (Dungeon.depth == 1){
-				level.Transitions.Add(new LevelTransition(level, entrance, LevelTransition.Type.SURFACE));
-			} else {
-				level.Transitions.Add(new LevelTransition(level, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
-			}
+			//TODO Entrance type
+			//if (Dungeon.depth == 1){
+			//	level.Transitions.Add(new LevelTransition(level, entrance, LevelTransition.Type.SURFACE));
+			//} else {
+			//	level.Transitions.Add(new LevelTransition(level, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
+			//}
 
+			/* TODO: ADD TUTORIAL PAGES LATER
 			//use a separate generator here so meta progression doesn't affect levelgen
 			RandomNumberGenerator.AddGenerator();
 
@@ -52,8 +55,8 @@ namespace Levels.Rooms.Standard
 				int pos;
 				do {
 					//can't be on bottom row of tiles
-					pos = level.PointToCell(new Point( Random.IntRange( left + 1, right - 1 ),
-							Random.IntRange( top + 1, bottom - 2 )));
+					pos = level.XYToCell(new( RandomNumberGenerator.IntRange( left + 1, right - 1 ),
+							RandomNumberGenerator.IntRange( top + 1, bottom - 2 )));
 				} while (pos == level.entrance() || level.findMob(level.entrance()) != null);
 				level.drop( new Guidebook(), pos );
 			}
@@ -64,21 +67,22 @@ namespace Levels.Rooms.Standard
 				do
 				{
 					//can't be on bottom row of tiles
-					pos = level.pointToCell(new Point( Random.IntRange( left + 1, right - 1 ),
-							Random.IntRange( top + 1, bottom - 2 )));
+					pos = level.XYToCell(new( RandomNumberGenerator.IntRange( left + 1, right - 1 ),
+							RandomNumberGenerator.IntRange( top + 1, bottom - 2 )));
 				} while (pos == level.Entrance() || level.FindMob(level.Entrance()) != null);
 				GuidePage p = new GuidePage();
 				p.page(Document.GUIDE_SEARCHING);
 				level.Drop( p, pos );
 			}
+			*/
 
 			RandomNumberGenerator.AddGenerator();
 
 		}
         //cannot connect to exit, otherwise works normally
-        public override bool Connect(Room room) =>	
+        public override bool Connect(Room room) =>
 			(Room.InstanceOf<ExitRoom>(room)) ? false : base.Connect(room);
-			
+
 		}
 	}
 
