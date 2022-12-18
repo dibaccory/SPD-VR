@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Levels;
+using Terrain;
 using Levels.Painters;
 using System.Drawing;
 //using System.Drawing;
@@ -18,8 +18,8 @@ namespace Levels.Rooms
         public int left, top, right, bottom;
 
         //+1 Because Rooms are inclusive to their right and bottom
-        public int Width => right - left + 1;
-        public int Height => bottom - top + 1;
+        public int Width { get => right - left + 1; set => Width = value; }
+        public int Height { get => bottom - top + 1; set => Height = value; }
         public int Area => Width * Height;
 
         public Room() : this(RectIntExtensions.zero) { }
@@ -268,7 +268,7 @@ namespace Levels.Rooms
         }
 
         //can be overriden for special merge logic between rooms
-        public void Merge(Level l, Room other, RectInt merge, int mergeTerrain)
+        public void Merge(Level l, Room other, RectInt merge, Tile mergeTerrain)
         {
             Painter.Fill(l, merge, mergeTerrain);
         }
@@ -326,12 +326,12 @@ namespace Levels.Rooms
         }
 
         public List<Vector2Int> WaterPlaceablePoints(){
-            List<Vector2Int> points = new List<Vector2Int>();
+            List<Vector2Int> points = new();
             for (int i = left; i <= right; i++)
             {
                 for (int j = top; j <= bottom; j++)
                 {
-                    Vector2Int p = new Vector2Int(i, j);
+                    Vector2Int p = new(i, j);
                     if (CanPlaceWater(p)) points.Add(p);
                 }
             }
@@ -345,12 +345,12 @@ namespace Levels.Rooms
         }
 
         public List<Vector2Int> GrassPlaceablePoints(){
-            List<Vector2Int> points = new List<Vector2Int>();
+            List<Vector2Int> points = new();
             for (int i = left; i <= right; i++)
             {
                 for (int j = top; j <= bottom; j++)
                 {
-                    Vector2Int p = new Vector2Int(i, j);
+                    Vector2Int p = new(i, j);
                     if (CanPlaceGrass(p)) points.Add(p);
                 }
             }
@@ -364,12 +364,12 @@ namespace Levels.Rooms
         }
 
         public List<Vector2Int> TrapPlaceablePoints(){
-            List<Vector2Int> points = new List<Vector2Int>();
+            List<Vector2Int> points = new();
             for (int i = left; i <= right; i++)
             {
                 for (int j = top; j <= bottom; j++)
                 {
-                    Vector2Int p = new Vector2Int(i, j);
+                    Vector2Int p = new(i, j);
                     if (CanPlaceTrap(p)) points.Add(p);
                 }
             }
@@ -383,12 +383,12 @@ namespace Levels.Rooms
         }
 
         public List<Vector2Int> ItemPlaceablePoints(Level l){
-            List<Vector2Int> points = new List<Vector2Int>();
+            List<Vector2Int> points = new();
             for (int i = left; i <= right; i++)
             {
                 for (int j = top; j <= bottom; j++)
                 {
-                    Vector2Int p = new Vector2Int(i, j);
+                    Vector2Int p = new(i, j);
                     if (CanPlaceItem(p, l)) points.Add(p);
                 }
             }
@@ -402,12 +402,12 @@ namespace Levels.Rooms
         }
 
         public List<Vector2Int> CharPlaceablePoints(Level l){
-            List<Vector2Int> points = new List<Vector2Int>();
+            List<Vector2Int> points = new();
             for (int i = left; i <= right; i++)
             {
                 for (int j = top; j <= bottom; j++)
                 {
-                    Vector2Int p = new Vector2Int(i, j);
+                    Vector2Int p = new(i, j);
                     if (CanPlaceCharacter(p, l)) points.Add(p);
                 }
             }
@@ -415,7 +415,7 @@ namespace Levels.Rooms
         }
 
         public List<Room> Edges() {
-            List<Room> edges = new List<Room>();
+            List<Room> edges = new();
             foreach(Room r in connected.Keys)
             {
                 Door d = connected[r];
