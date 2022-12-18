@@ -15,9 +15,9 @@ namespace Levels
             SECRETS
         }
 
-        protected int width;
-        protected int depth;
-        protected int length;
+        public int width  { get; private set; }
+        public int height { get; private set; }
+        public int length { get; private set; }
 
         protected static readonly float TIME_TO_RESPAWN = 50;
 
@@ -70,7 +70,7 @@ namespace Levels
 
             do
             {
-                width = depth = length = 0;
+                width = height = length = 0;
 
                 //transitions = new ArrayList<>();
 
@@ -93,12 +93,12 @@ namespace Levels
             //Random.popGenerator();
         }
 
-        public void SetSize(int w, int d)
+        public void SetSize(int w, int h)
         {
 
             width = w;
-            depth = d;
-            length = w * d;
+            height = h;
+            length = w * h;
 
             map = new int[length];
             //Arrays.fill(map, feeling == Level.Feeling.CHASM ? Terrain.CHASM : Terrain.WALL);
@@ -126,21 +126,6 @@ namespace Levels
         public void BuildFlagMaps() { /*TODO*/ }
 
            public void CleanWalls() { /*TODO*/ }
-
-        public int Width()
-        {
-            return width;
-        }
-
-        public int Depth()
-        {
-            return depth;
-        }
-
-        public int Length()
-        {
-            return length;
-        }
 
         /*
         public int tunnelTile()

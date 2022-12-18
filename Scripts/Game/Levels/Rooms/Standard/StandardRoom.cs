@@ -60,6 +60,9 @@ namespace Levels.Rooms
         public override int MinHeight => sizeCat.GetAttribute<SizeCategoryAttr>().MinDim;
         public override int MaxHeight =>  sizeCat.GetAttribute<SizeCategoryAttr>().MaxDim;
 
+        public int ConnectionWeight => ((int)sizeCat+1) * ((int)sizeCat + 1);
+
+
         //private static List<StandardRoom> roomTypes = new List<StandardRoom>();
 
         public class RoomTypeAttr : Attribute

@@ -50,14 +50,14 @@ namespace Levels.Builders
                     {
                         it.Dispose();
                     }
-                }while (it.MoveNext());
+                } while (it.MoveNext());
 
                 //iterate through all rooms we are overlapping, and find the closest one
                 Room closestRoom = null;
                 int closestDiff = Int32.MaxValue;
                 bool inside = true;
                 int curDiff = 0;
-                foreach(Room curRoom in colliding)
+                foreach (Room curRoom in colliding)
                 {
 
                     if (start.x <= curRoom.left)
@@ -143,5 +143,34 @@ namespace Levels.Builders
 
             return space;
         }
+
+
+        //returns the angle in degrees made by the centerpoints of 2 rooms, with 0 being straight up.
+        protected static float angleBetweenRooms(Room from, Room to)
+        {
+            PointF fromCenter = new PointF((from.left + from.right) / 2f, (from.top + from.bottom) / 2f);
+            PointF toCenter = new PointF((to.left + to.right) / 2f, (to.top + to.bottom) / 2f);
+            return angleBetweenPoints(fromCenter, toCenter);
+        }
+
+        protected static float angleBetweenPoints(Vector2Int from, Vector2Int to)
+        {
+            double m = (to.y - from.y) / (to.x - from.x);
+
+            float angle = (float)(A * (Math.Atan(m) + Math.PI / 2.0));
+            if (from.x > to.x) angle -= 180f;
+            return angle;
+        }
+
+        //Attempts to place a room such that the angle between the center of the previous room
+        // and it matches the given angle ([0-360), where 0 is straight up) as closely as possible.
+        //Note that getting an exactly correct angle is harder the closer that angle is to diagonal.
+        //Returns the exact angle between the centerpoints of the two rooms, or -1 if placement fails.
+        protected static float PlaceRoom(List<Room> collision, Room prev, Room next, float angle)
+        {
+
+            return -1;
+        }
+
     }
 }

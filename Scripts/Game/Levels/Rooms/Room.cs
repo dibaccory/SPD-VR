@@ -33,6 +33,8 @@ namespace Levels.Rooms
             bottom = r.yMax;
         }
 
+        public Room zero() => Set(0, 0, 0, 0);
+
         public Room Set( int left, int top, int right, int bottom)
         {
             this.left = left;
@@ -69,10 +71,10 @@ namespace Levels.Rooms
         //Note: when overriding these YOU MUST store any randomly decided values.
         //With the same room and the same parameters these should always return
         //the same value over multiple calls, even if there's some randomness initially.
-        public virtual int MinWidth => -1;
-        public virtual int MaxWidth => -1;
-        public virtual int MinHeight => -1;
-        public virtual int MaxHeight => -1;
+        public virtual int MinWidth  { get; private set; } = -1;
+        public virtual int MaxWidth  { get; private set; } = -1;
+        public virtual int MinHeight { get; private set; } = -1;
+        public virtual int MaxHeight { get; private set; } = -1;
 
         public bool IsEmpty => right <= left || bottom <= top;
         

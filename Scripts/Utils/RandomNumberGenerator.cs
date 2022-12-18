@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -207,41 +208,32 @@ namespace Utils
         //        null;
         //}
 
-        //public synchronized static<T> void shuffle(List<?extends T> list)
-        //{
-        //    Collections.shuffle(list, generators.peek());
-        //}
+        public static void Shuffle<T>(List<T> list)
+        {
+            list.OrderBy(i => new Random().Next()).ToList();
+        }
 
-        //public static<T> void shuffle(T[] array)
-        //{
-        //    for (int i = 0; i < array.length - 1; i++)
-        //    {
-        //        int j = Int(i, array.length);
-        //        if (j != i)
-        //        {
-        //            T t = array[i];
-        //            array[i] = array[j];
-        //            array[j] = t;
-        //        }
-        //    }
-        //}
+        public static void Shuffle<T>(T[] array)
+        {
+            array.OrderBy(i => new Random().Next()).ToList();
+        }
 
-        //public static<U,V> void shuffle(U[] u, V[] v)
-        //{
-        //    for (int i = 0; i < u.length - 1; i++)
-        //    {
-        //        int j = Int(i, u.length);
-        //        if (j != i)
-        //        {
-        //            U ut = u[i];
-        //            u[i] = u[j];
-        //            u[j] = ut;
+        public static void Shuffle<U, V>(U[] u, V[] v)
+        {
+            for (int i = 0; i < u.Length - 1; i++)
+            {
+                int j = Int(i, u.Length);
+                if (j != i)
+                {
+                    U ut = u[i];
+                    u[i] = u[j];
+                    u[j] = ut;
 
-        //            V vt = v[i];
-        //            v[i] = v[j];
-        //            v[j] = vt;
-        //        }
-        //    }
-        //}
+                    V vt = v[i];
+                    v[i] = v[j];
+                    v[j] = vt;
+                }
+            }
+        }
     }
 }
