@@ -53,15 +53,14 @@ namespace Terrain
 
     public static class Terrain
     {
-        public static Tile discover(Tile t)
+        public static Tile Discover(Tile t)
         {
             if (t == Tile.SecretDoor) t = Tile.Door;
             else if (t == Tile.SecretTrap) t = Tile.Trap;
-
             return t;
         }
 
-        public static Dictionary<Tile, TileFlags> flags = new Dictionary<Tile, TileFlags>
+        public static Dictionary<Tile, TileFlags> flags = new()
         {
             { Tile.Chasm,           TileFlags.Avoid | TileFlags.Pit },
             { Tile.Empty,           TileFlags.Passable },
@@ -95,6 +94,7 @@ namespace Terrain
             { Tile.HighGrass,       TileFlags.LOSBlocking | TileFlags.Flammable | TileFlags.Passable},
             { Tile.FurrowedGrass,   TileFlags.LOSBlocking | TileFlags.Flammable | TileFlags.Passable}
         };
+
 
     }
 

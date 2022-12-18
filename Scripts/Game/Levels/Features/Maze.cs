@@ -5,7 +5,7 @@ using Terrain;
 
 namespace Levels.Features
 {
-    public class Maze
+    public static class Maze
     {
 
         public static readonly bool EMPTY = false;

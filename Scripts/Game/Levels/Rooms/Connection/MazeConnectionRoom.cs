@@ -1,5 +1,5 @@
 ﻿using System;
-using Levels;
+using Levels.Features;
 using Levels.Painters;
 using Terrain;
 using Levels.Rooms;
@@ -13,17 +13,17 @@ namespace Levels.Rooms.Connection
 		}
 
 		public override void Paint(Level level) {
-			Painter.fill(level, this, 1, Tile.Empty);
+			Painter.Fill(level, this, 1, Tile.Empty);
 
 			//true = space, false = wall
 			Maze.allowDiagonals = false;
-			boolean[][] maze = Maze.generate(this);
+			bool[][] maze = Maze.Generate(this);
 
-			Painter.fill(level, this, 1, Tile.Empty);
-			for (int x = 0; x < maze.length; x++)
-				for (int y = 0; y < maze[0].length; y++) {
+			Painter.Fill(level, this, 1, Tile.Empty);
+			for (int x = 0; x < maze.Length; x++)
+				for (int y = 0; y < maze[0].Length; y++) {
 					if (maze[x][y] == Maze.FILLED) {
-						Painter.fill(level, x + left, y + top, 1, 1, Tile.Wall);
+						Painter.Fill(level, x + left, y + top, 1, 1, Tile.Wall);
 					}
 				}
 

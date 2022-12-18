@@ -1,4 +1,6 @@
 ﻿using System;
+using Terrain;
+
 namespace Levels
 {
     public abstract class Level
@@ -23,7 +25,7 @@ namespace Levels
 
         public int version;
 
-        public int[] map;
+        public Tile[] map;
         public bool[] visited;
         public bool[] mapped;
         public bool[] discoverable;
@@ -100,21 +102,20 @@ namespace Levels
             height = h;
             length = w * h;
 
-            map = new int[length];
             //Arrays.fill(map, feeling == Level.Feeling.CHASM ? Terrain.CHASM : Terrain.WALL);
+            map = new Tile[length];
+
+            //These are dynamic flags... Change off of gamestate
             heroFOV = new bool[length];
             visited = new bool[length];
             mapped = new bool[length];
-            passable = new bool[length];
-            losBlocking = new bool[length];
-            flamable = new bool[length];
-            secret = new bool[length];
-            solid = new bool[length];
-            avoid = new bool[length];
-            water = new bool[length];
-            pit = new bool[length];
-
+            //openSpace can be static, but it also considers mobs in places where large mobs cannot access...
             openSpace = new bool[length];
+
+            /*
+             * 
+             * 
+             */
 
             //PathFinder.setMapSize(w, d);
         }
