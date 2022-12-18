@@ -289,7 +289,7 @@ namespace Levels.Rooms
             return false;
         }
 
-        public bool Connect(Room room)
+        public virtual bool Connect(Room room)
         {
             if ((neighbors.Contains(room) || AddNeighbor(room))
                     && !connected.ContainsKey(room) && CanConnect(room))
@@ -420,8 +420,8 @@ namespace Levels.Rooms
             {
                 Door d = connected[r];
                 //for the purposes of path building, ignore all doors that are locked, blocked, or hidden
-                if (d.type == Door.Type.EMPTY || d.type == Door.Type.TUNNEL
-                        || d.type == Door.Type.UNLOCKED || d.type == Door.Type.REGULAR)
+                if (d.type == Door.Type.Empty || d.type == Door.Type.Tunnel
+                        || d.type == Door.Type.Unlocked || d.type == Door.Type.Regular)
                 {
                     edges.Add(r);
                 }
@@ -431,16 +431,18 @@ namespace Levels.Rooms
 
         public void OnLevelLoad( Level l) { }
 
+        public static bool InstanceOf<T>(Room r) => r is T;
+
         public sealed class Door
         {
             public Vector3 pos;
 
             public enum Type
             {
-                EMPTY, TUNNEL, WATER, REGULAR, UNLOCKED, HIDDEN, BARRICADE, LOCKED, CRYSTAL
+                Empty, Tunnel, Water, Regular, Unlocked, Hidden, Barricade, Locked, Crystal
             }
 
-            public Type type = Type.EMPTY;
+            public Type type = Type.Empty;
 
             public Door()
             {
@@ -485,9 +487,9 @@ namespace Levels.Rooms
 
         public enum SizeCategory
         {
-            [SizeCategoryAttr(4, 10, 1)] NORMAL,
-            [SizeCategoryAttr(10, 14, 2)] LARGE,
-            [SizeCategoryAttr(14, 18, 3)] GIANT
+            [SizeCategoryAttr(4, 10, 1)] Normal,
+            [SizeCategoryAttr(10, 14, 2)] Large,
+            [SizeCategoryAttr(14, 18, 3)] Giant
         }
 
     }

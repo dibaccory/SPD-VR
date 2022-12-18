@@ -15,12 +15,12 @@ namespace Levels.Rooms.Standard
 
         public override void Paint(Level level)
         {
-            Painter.Fill(level, this, (int)Tile.Wall);
-            Painter.Fill(level, this, 1, (int)Tile.Empty);
+            Painter.Fill(level, this, Tile.Wall);
+            Painter.Fill(level, this, 1, Tile.Empty);
 
             foreach (Door door in connected.Values)
             {
-                door.Set(Door.Type.REGULAR);
+                door.Set(Door.Type.Regular);
             }
         }
     }

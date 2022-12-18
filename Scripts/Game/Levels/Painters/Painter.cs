@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Levels;
 using Newtonsoft.Json.Linq;
+using Terrain;
 using Levels.Rooms;
 using System.Drawing;
 using UnityEngine;
@@ -46,14 +47,14 @@ namespace Levels.Painters
             }
         }
 
-        public static void Fill(Level level, Room r, int value)
+        public static void Fill(Level level, Room r, Tile value)
         {
-            Fill(level, r.left, r.top, r.Width, r.Height, value);
+            Fill(level, r.left, r.top, r.Width, r.Height, (int)value);
         }
 
-        public static void Fill(Level level, Room r, int m, int value)
+        public static void Fill(Level level, Room r, int m, Tile value)
         {
-            Fill(level, r.left + m, r.top + m, r.Width - m * 2, r.Height - m * 2, value);
+            Fill(level, r.left + m, r.top + m, r.Width - m * 2, r.Height - m * 2, (int)value);
         }
 
         public static void Fill(Level level, Room room, int l, int t, int r, int b, int value)
