@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Utils;
+using TileInfo;
 using DungeonInstance;
 
 
@@ -136,12 +137,11 @@ namespace Levels.Rooms.Standard
             return (StandardRoom)Activator.CreateInstance(chosenRoomClass);
         }
 
-        //TODO: NEED TERRAIN CLASS!! override
-        //public boolean canMerge(Level l, Point p, int mergeTerrain)
-        //{
-        //    int cell = l.pointToCell(pointInside(p, 1));
-        //    return (Terrain.flags[l.map[cell]] & Terrain.SOLID) == 0;
-        //}
+        public override bool CanMerge(Level l, Vector2Int p, int mergeTerrain)
+        {
+            int cell = l.PointToCell(PointInside(p, 1));
+            return !Terrain.TileHasFlag(l.map[cell], TileFlags.Solid);
+        }
 
 
     }

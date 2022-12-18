@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Levels.Rooms;
-using static Levels.Rooms.Room;
+using Levels.Rooms.Standard;
 using Utils;
 
 namespace Levels
@@ -23,7 +23,7 @@ namespace Levels
 
         protected List<Room> CreateRooms()
         {
-            List<Room> r = new List<Room>();
+            List<Room> r = new();
             //r.Add(roomEntrance = new EntranceRoom());
             //r.Add(roomExit = new ExitRoom());
 

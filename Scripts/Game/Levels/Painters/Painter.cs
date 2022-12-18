@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Levels;
 using Newtonsoft.Json.Linq;
-using Terrain;
+using TileInfo;
 using Levels.Rooms;
 using System.Drawing;
 using UnityEngine;

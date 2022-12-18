@@ -1,5 +1,9 @@
 ﻿using System;
-using Terrain;
+using System.Collections.Generic;
+using UnityEngine;
+//using System.Drawing;
+using TileInfo;
+
 
 namespace Levels
 {
@@ -66,6 +70,10 @@ namespace Levels
 
         public int color1 = 0x004400;
         public int color2 = 0x88CC44;
+
+        public Vector2Int CellToXY(int cell) => new(cell % Width, cell / Width);
+        public int XYToCell(Vector2Int p) => p.x + p.y * Width;
+       
 
         public void Create()
         {

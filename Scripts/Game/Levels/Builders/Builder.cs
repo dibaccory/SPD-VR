@@ -146,14 +146,14 @@ namespace Levels.Builders
 
 
         //returns the angle in degrees made by the centerpoints of 2 rooms, with 0 being straight up.
-        protected static float angleBetweenRooms(Room from, Room to)
+        protected static float AngleBetweenRooms(Room from, Room to)
         {
-            PointF fromCenter = new PointF((from.left + from.right) / 2f, (from.top + from.bottom) / 2f);
-            PointF toCenter = new PointF((to.left + to.right) / 2f, (to.top + to.bottom) / 2f);
-            return angleBetweenPoints(fromCenter, toCenter);
+            Vector2 fromCenter = new((from.left + from.right) / 2f, (from.top + from.bottom) / 2f);
+            Vector2 toCenter = new((to.left + to.right) / 2f, (to.top + to.bottom) / 2f);
+            return AngleBetweenPoints(fromCenter, toCenter);
         }
 
-        protected static float angleBetweenPoints(Vector2Int from, Vector2Int to)
+        protected static float AngleBetweenPoints(Vector2 from, Vector2 to)
         {
             double m = (to.y - from.y) / (to.x - from.x);
 

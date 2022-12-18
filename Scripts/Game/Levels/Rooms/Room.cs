@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Terrain;
+using TileInfo;
 using Levels.Painters;
 using System.Drawing;
 //using System.Drawing;
@@ -267,8 +267,8 @@ namespace Levels.Rooms
             return false;
         }
 
-        //can be overriden for special merge logic between rooms
-        public void Merge(Level l, Room other, RectInt merge, Tile mergeTerrain)
+        //TODO MAY NEED Merge to be RectInt
+        public void Merge(Level l, Room other, Room merge, Tile mergeTerrain)
         {
             Painter.Fill(l, merge, mergeTerrain);
         }
@@ -469,28 +469,28 @@ namespace Levels.Rooms
             }
         }
 
-        public class SizeCategoryAttr : Attribute
+    }
+
+    public class SizeCategoryAttr : Attribute
+    {
+        internal SizeCategoryAttr(int min, int max, int val)
         {
-            internal SizeCategoryAttr(int min, int max, int val)
-            {
-                this.MinDim = min;
-                this.MaxDim = max;
-                this.RoomValue = val;
-            }
-
-            internal int ConnectionWeight() { return this.RoomValue * this.RoomValue; }
-            public int MinDim { get; private set; }
-            public int MaxDim { get; private set; }
-            public int RoomValue { get; private set; }
-
+            this.MinDim = min;
+            this.MaxDim = max;
+            this.RoomValue = val;
         }
 
-        public enum SizeCategory
-        {
-            [SizeCategoryAttr(4, 10, 1)] Normal,
-            [SizeCategoryAttr(10, 14, 2)] Large,
-            [SizeCategoryAttr(14, 18, 3)] Giant
-        }
+        internal int ConnectionWeight() { return this.RoomValue * this.RoomValue; }
+        public int MinDim { get; private set; }
+        public int MaxDim { get; private set; }
+        public int RoomValue { get; private set; }
 
+    }
+
+    public enum SizeCategory
+    {
+        [SizeCategoryAttr(4, 10, 1)] Normal,
+        [SizeCategoryAttr(10, 14, 2)] Large,
+        [SizeCategoryAttr(14, 18, 3)] Giant
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Terrain
+namespace TileInfo
 {
     public enum Tile
     {
@@ -95,7 +95,7 @@ namespace Terrain
             { Tile.FurrowedGrass,   TileFlags.LOSBlocking | TileFlags.Flammable | TileFlags.Passable}
         };
 
-
+        public static bool TileHasFlag(Tile t, TileFlags f) => (flags[t] & f) == f;
     }
 
 }
