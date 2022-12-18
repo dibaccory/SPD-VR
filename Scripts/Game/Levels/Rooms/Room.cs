@@ -262,7 +262,7 @@ namespace Levels.Rooms
                 return false;
         }
 
-        public bool CanMerge(Level l, Point p, int mergeTerrain)
+        public bool CanMerge(Level l, Point p, Tile mergeTerrain)
         {
             return false;
         }
@@ -435,7 +435,7 @@ namespace Levels.Rooms
 
         public sealed class Door
         {
-            public Vector3 pos;
+            public Vector2Int pos;
 
             public enum Type
             {
@@ -448,15 +448,15 @@ namespace Levels.Rooms
             {
             }
 
-            public Door(Vector3 p)
+            public Door(Vector2Int p)
             {
                 this.pos = p;
             }
 
-            public Door(int x, int z)
+            public Door(int x, int y)
             {
                 this.pos.x = x;
-                this.pos.z = z;
+                this.pos.y = y;
             }
 
             public void Set(Type type)

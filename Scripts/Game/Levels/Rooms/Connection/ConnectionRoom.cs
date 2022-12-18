@@ -52,8 +52,8 @@ namespace Levels.Rooms.Connection
 		// 	chances[26] = chances[25] = chances[24] = chances[23] = chances[22];
 		// }
 
-		public static ConnectionRoom createRoom(){
-			//return Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));
-		}
+		//public static ConnectionRoom Create(){
+		//	//return Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));
+		//}
 	}
 }

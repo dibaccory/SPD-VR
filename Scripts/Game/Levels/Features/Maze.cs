@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using Levels.Rooms;
 using Utils;
 using Terrain;
@@ -10,25 +11,25 @@ namespace Levels.Features
 
         public static readonly bool EMPTY = false;
         public static readonly bool FILLED = true;
-        private int width, height;
+        private static int width, height;
 
-        private bool inBounds (x,y) => (x > 0 && x < width && y > 0 && y < height);
-        private bool isEdge (x,y) => (x == 0 || x == width - 1 || y == 0 || y == height - 1);
-        private bool isDirAdjToOtherFills (maze, x,y, dx, dy) => (maze[x][y] || maze[x + dx][y + dy] || maze[x - dx][y - dy]);
+        private static bool inBounds (int x, int y) => (x > 0 && x < width && y > 0 && y < height);
+        private static bool isEdge (int x, int y) => (x == 0 || x == width - 1 || y == 0 || y == height - 1);
+        private static bool isDirAdjToOtherFills (bool[,] maze, int x,int y, int dx, int dy) => (maze[x,y] || maze[x + dx,y + dy] || maze[x - dx,y - dy]);
 
 
-        public static bool[][] Generate(Room r)
+        public static bool[,] Generate(Room r)
         {
             width = r.Width;
             height = r.Height;
-            bool[][] maze = new bool[r.Width][r.Height];
+            bool[,] maze = new bool[width,height];
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
                     if (isEdge(x,y))
                     {
-                        maze[x][y] = FILLED;
+                        maze[x,y] = FILLED;
                     }
                 }
             }
@@ -36,21 +37,21 @@ namespace Levels.Features
             //set spaces where there are doors
             foreach(Room.Door d in r.connected.Values)
             {
-                maze[d.x - r.left][d.y - r.top] = EMPTY;
+                maze[d.pos.x - r.left, d.pos.y - r.top] = EMPTY;
             }
 
             return Generate(maze);
         }
 
-        public static bool[][] Generate(Rect r) => Generate(r.Width + 1, r.Height + 1);
-        public static bool[][] Generate(int w, int h)
+        public static bool[,] Generate(RectInt r) => Generate(r.width + 1, r.height + 1);
+        public static bool[,] Generate(int w, int h)
         {
-          width = w;
-          height = h;
-          return Generate(new bool[w][h])
+            width = w;
+            height = h;
+            return Generate(new bool[w, h]);
         }
 
-        public static bool[][] Generate(bool[][] maze)
+        public static bool[,] Generate(bool[,] maze)
         {
             int fails = 0;
             int x, y, moves;
@@ -63,7 +64,7 @@ namespace Levels.Features
                 {
                     x = RandomNumberGenerator.Int(width);
                     y = RandomNumberGenerator.Int(height);
-                } while (!maze[x][y]);
+                } while (!maze[x,y]);
 
                 //decide on how we're going to move
                 mov = DecideDirection(maze, x, y);
@@ -79,7 +80,7 @@ namespace Levels.Features
                     {
                         x += mov[0];
                         y += mov[1];
-                        maze[x][y] = FILLED;
+                        maze[x,y] = FILLED;
                         moves++;
                     } while (RandomNumberGenerator.Int(moves) == 0 && CheckValidMove(maze, x, y, mov));
 
@@ -91,9 +92,9 @@ namespace Levels.Features
         }
 
 
-        public static bool[][] Generate(Rect r, Tile[] terrain, int width, Tile filledTerrainType)
+        public static bool[,] Generate(Room r, Tile[] terrain, int width, Tile filledTerrainType)
         {
-            bool[][] maze = new bool[r.Width][r.Height];
+            bool[,] maze = new bool[r.Width,r.Height];
             //Fill edges of Maze Room
             for (int x = 0; x < width; x++)
             {
@@ -101,7 +102,7 @@ namespace Levels.Features
                 {
                     if (terrain[x + r.left + (y + r.top) * width] == filledTerrainType)
                     {
-                        maze[x][y] = FILLED;
+                        maze[x,y] = FILLED;
                     }
                 }
             }
@@ -110,7 +111,7 @@ namespace Levels.Features
         }
 
         //This is to build the maze WALLS
-        private static int[] DecideDirection(bool[][] maze, int x, int y)
+        private static int[] DecideDirection(bool[,] maze, int x, int y)
         {
 
             //attempts to move up
@@ -147,10 +148,10 @@ namespace Levels.Features
         public static bool allowDiagonals = false;
 
         //We want walls to branch out randomly
-        private static bool CheckValidMove(bool[][] maze, int x, int y, int[] mov)
+        private static bool CheckValidMove(bool[,] maze, int x, int y, int[] mov)
         {
-            int sideX = 1 - Math.abs(mov[0]);
-            int sideY = 1 - Math.abs(mov[1]);
+            int sideX = 1 - Math.Abs(mov[0]);
+            int sideY = 1 - Math.Abs(mov[1]);
 
             x += mov[0];
             y += mov[1];

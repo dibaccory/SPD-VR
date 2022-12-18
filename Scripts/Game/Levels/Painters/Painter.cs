@@ -26,7 +26,7 @@ namespace Levels.Painters
 
         public static void Set(Level level, int x, int y, Tile value)
         {
-            Set(level, x + y * level.width, value);
+            Set(level, x + y * level.Width, value);
             
         }
 
@@ -38,7 +38,7 @@ namespace Levels.Painters
         public static void Fill(Level level, int x, int y, int w, int h, Tile value)
         {
 
-            int width = level.width;
+            int width = level.Width;
 
             int pos = y * width + x;
             for (int i = y; i < y + h; i++, pos += width)
