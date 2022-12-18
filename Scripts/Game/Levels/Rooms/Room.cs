@@ -189,7 +189,7 @@ namespace Levels.Rooms
             return points;
         }
 
-        public int MinConnections(int direction) => Convert.ToInt32(direction == ALL);
+        public virtual int MinConnections(int direction) => Convert.ToInt32(direction == ALL);
 
         public int CurConnections(int direction)
         {
@@ -220,7 +220,7 @@ namespace Levels.Rooms
                 : 0;
         }
 
-        public int MaxConnections(int direction)
+        public virtual int MaxConnections(int direction)
         {
             return (direction == ALL) ? 16 : 4;
         }

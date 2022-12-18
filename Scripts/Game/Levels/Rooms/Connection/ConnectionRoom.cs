@@ -5,15 +5,15 @@ namespace Levels.Rooms.Connection
 {
 	public abstract class ConnectionRoom : Room
 	{
-		public override int minWidth() { return 3; }
-		public override int maxWidth() { return 10; }
+		public override int MinWidth => 3;
+		public override int MaxWidth => 10;
 
 
-		public override int minHeight() { return 3; }
-		public overrride int maxHeight() { return 10; }
+		public override int MinHeight => 3;
+		public override int MaxHeight => 10;
 
 
-		public override int minConnections(int direction) {
+		public override int MinConnections(int direction) {
 			if (direction == ALL)   return 2;
 			else                    return 0;
 		}

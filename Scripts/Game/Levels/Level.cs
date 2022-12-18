@@ -17,32 +17,33 @@ namespace Levels
             SECRETS
         }
 
-        public int width  { get; private set; }
-        public int height { get; private set; }
-        public int length { get; private set; }
+        public int Width  { get; private set; }
+        public int Height { get; private set; }
+        public int Length { get => Width * Height; set => Length = value; }
 
         protected static readonly float TIME_TO_RESPAWN = 50;
 
         public int version;
 
         public Tile[] map;
+        public bool[] heroFOV;
         public bool[] visited;
         public bool[] mapped;
         public bool[] discoverable;
+        public bool[] openSpace;
 
         //public int viewDistance = Dungeon.isChallenged(Challenges.DARKNESS) ? 2 : 8;
 
-        public bool[] heroFOV;
-
-        public bool[] passable;
-        public bool[] losBlocking;
-        public bool[] flamable;
-        public bool[] secret;
-        public bool[] solid;
-        public bool[] avoid;
-        public bool[] water;
-        public bool[] pit;
-        public bool[] openSpace;
+        //STATIC FLAGS. WILL DELETE
+        //public bool[] passable;
+        //public bool[] losBlocking;
+        //public bool[] flamable;
+        //public bool[] secret;
+        //public bool[] solid;
+        //public bool[] avoid;
+        //public bool[] water;
+        //public bool[] pit;
+       
         public Feeling feeling = Feeling.NONE;
         public int entrance;
         public int exit;
@@ -72,7 +73,7 @@ namespace Levels
 
             do
             {
-                width = height = length = 0;
+                Width = Height = Length = 0;
 
                 //transitions = new ArrayList<>();
 
@@ -98,24 +99,19 @@ namespace Levels
         public void SetSize(int w, int h)
         {
 
-            width = w;
-            height = h;
-            length = w * h;
+            Width = w;
+            Height = h;
+            //Length = w * h; TODO CHECK IF NEEDED
 
             //Arrays.fill(map, feeling == Level.Feeling.CHASM ? Terrain.CHASM : Terrain.WALL);
-            map = new Tile[length];
+            map = new Tile[Length];
 
             //These are dynamic flags... Change off of gamestate
-            heroFOV = new bool[length];
-            visited = new bool[length];
-            mapped = new bool[length];
+            heroFOV = new bool[Length];
+            visited = new bool[Length];
+            mapped = new bool[Length];
             //openSpace can be static, but it also considers mobs in places where large mobs cannot access...
-            openSpace = new bool[length];
-
-            /*
-             * 
-             * 
-             */
+            openSpace = new bool[Length];
 
             //PathFinder.setMapSize(w, d);
         }

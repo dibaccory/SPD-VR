@@ -27,13 +27,12 @@ namespace Levels.Rooms.Connection
 					}
 				}
 
-			for (Door door : connected.values()) {
-				door.set( Door.Type.HIDDEN );
+			foreach(Door door in connected.Values) {
+				door.Set( Door.Type.Hidden );
 			}
 		}
-
-		@Override
-		public int maxConnections(int direction) {
+		
+		public override int MaxConnections(int direction) {
 			return 2;
 		}
 	}
