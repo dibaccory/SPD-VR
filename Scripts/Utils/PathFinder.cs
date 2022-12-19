@@ -33,7 +33,7 @@ namespace Utils
 
         public class Path : LinkedList<int> { }
 
-        public static void setMapSize(int width, int height)
+        public static void SetMapSize(int width, int height)
         {
 
             PathFinder.width = width;
@@ -94,7 +94,7 @@ namespace Utils
             return result;
         }
 
-        public static int getStep(int from, int to, bool[] passable)
+        public static int GetStep(int from, int to, bool[] passable)
         {
 
             if (!BuildDistanceMap(from, to, passable))
@@ -121,7 +121,7 @@ namespace Utils
             return best;
         }
 
-        public static int getStepBack(int cur, int from, bool[] passable)
+        public static int GetStepBack(int cur, int from, bool[] passable)
         {
 
             int d = BuildEscapeDistanceMap(cur, from, 5, passable);
@@ -303,7 +303,7 @@ namespace Utils
             return pathFound;
         }
 
-        private static int buildEscapeDistanceMap(int cur, int from, int lookAhead, bool[] passable)
+        private static int BuildEscapeDistanceMap(int cur, int from, int lookAhead, bool[] passable)
         {
 
             //System.arraycopy(maxVal, 0, distance, 0, maxVal.length);

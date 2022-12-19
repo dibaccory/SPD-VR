@@ -217,15 +217,15 @@ namespace Levels.Builders
             //cap it to a valid connection point for most rooms
             if (direction == Room.TOP || direction == Room.BOTTOM)
             {
-                start.x = (int)GameMath.gate(prev.left + 1, start.x, prev.right - 1);
+                start.x = (int)Tools.Gate(prev.left + 1, start.x, prev.right - 1);
             }
             else
             {
-                start.y = (int)GameMath.gate(prev.top + 1, start.y, prev.bottom - 1);
+                start.y = (int)Tools.Gate(prev.top + 1, start.y, prev.bottom - 1);
             }
 
             //space checking
-            RectInt space = FindFreeSpace(start, collision, Math.Max(next.MaxWidth, next.MaxHeight);
+            RectInt space = FindFreeSpace(start, collision, Math.Max(next.MaxWidth, next.MaxHeight));
             if (!next.SetSizeWithLimit(space.width + 1, space.height + 1))
             {
                 return -1;
