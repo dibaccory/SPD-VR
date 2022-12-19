@@ -1,7 +1,7 @@
 ﻿using System;
 using Levels.Features;
 using Levels.Painters;
-using Terrain;
+using TileInfo;
 using Levels.Rooms;
 
 namespace Levels.Rooms.Connection
@@ -17,12 +17,12 @@ namespace Levels.Rooms.Connection
 
 			//true = space, false = wall
 			Maze.allowDiagonals = false;
-			bool[][] maze = Maze.Generate(this);
+			bool[,] maze = Maze.Generate(this);
 
 			Painter.Fill(level, this, 1, Tile.Empty);
 			for (int x = 0; x < maze.Length; x++)
-				for (int y = 0; y < maze[0].Length; y++) {
-					if (maze[x][y] == Maze.FILLED) {
+				for (int y = 0; y < maze.GetLength(0); y++) {
+					if (maze[x,y] == Maze.FILLED) {
 						Painter.Fill(level, x + left, y + top, 1, 1, Tile.Wall);
 					}
 				}

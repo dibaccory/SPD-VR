@@ -1,6 +1,6 @@
 ﻿using System;
 using Utils;
-using Levels;
+using UnityEngine;
 using TileInfo;
 using Levels.Painters;
 using Levels.Rooms;
@@ -24,13 +24,14 @@ namespace Levels.Rooms.Standard
 				door.Set( Room.Door.Type.Regular );
 			}
 
-			int exit = level.pointToCell(random( 2 ));
+			int exit = level.XYToCell(Random( 2 ));
 			Painter.Set( level, exit, Tile.Exit );
-			level.Transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
+			//TODO fix whenever u can
+			//level.Transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
 		}
 
 		public override bool CanPlaceCharacter(Vector2Int p, Level l) {
-		return base.CanPlaceCharacter(p, l) && l.PointToCell(p) != l.Exit();
+		return base.CanPlaceCharacter(p, l) && l.XYToCell(p) != l.Exit();
 	}
 
 		public override bool Connect(Room room) {

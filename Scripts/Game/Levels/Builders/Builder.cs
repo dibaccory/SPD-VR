@@ -29,9 +29,9 @@ namespace Levels.Builders
         }
 
         //returns a rectangle representing the maximum amount of free space from a specific start point
-        protected static RectInt findFreeSpace(Vector2Int start, List<Room> collision, int maxSize)
+        protected static RectInt FindFreeSpace(Vector2Int start, List<Room> collision, int maxSize)
         {
-            RectInt space = new RectInt(start.x - maxSize, start.y - maxSize, start.x + maxSize, start.y + maxSize);
+            RectInt space = new(start.x - maxSize, start.y - maxSize, start.x + maxSize, start.y + maxSize);
 
             //shallow copy
             List<Room> colliding = new List<Room>(collision);
@@ -144,20 +144,21 @@ namespace Levels.Builders
             return space;
         }
 
+        private static readonly double RADIAN = 180 / Math.PI;
 
         //returns the angle in degrees made by the centerpoints of 2 rooms, with 0 being straight up.
         protected static float AngleBetweenRooms(Room from, Room to)
         {
             Vector2 fromCenter = new((from.left + from.right) / 2f, (from.top + from.bottom) / 2f);
             Vector2 toCenter = new((to.left + to.right) / 2f, (to.top + to.bottom) / 2f);
-            return AngleBetweenPoints(fromCenter, toCenter);
+            return AngleBetweenVector2Ints(fromCenter, toCenter);
         }
 
-        protected static float AngleBetweenPoints(Vector2 from, Vector2 to)
+        protected static float AngleBetweenVector2Ints(Vector2 from, Vector2 to)
         {
             double m = (to.y - from.y) / (to.x - from.x);
 
-            float angle = (float)(A * (Math.Atan(m) + Math.PI / 2.0));
+            float angle = (float)(RADIAN * (Math.Atan(m) + Math.PI / 2.0));
             if (from.x > to.x) angle -= 180f;
             return angle;
         }
@@ -169,7 +170,126 @@ namespace Levels.Builders
         protected static float PlaceRoom(List<Room> collision, Room prev, Room next, float angle)
         {
 
-            return -1;
+
+            //wrap angle around to always be [0-360)
+            angle %= 360f;
+            if (angle < 0)
+            {
+                angle += 360f;
+            }
+
+            Vector2 prevCenter = new((prev.left + prev.right) / 2f, (prev.top + prev.bottom) / 2f);
+
+            // calculating using y = mx+b, straight line formula
+            double m = Math.Tan(angle / RADIAN + Math.PI / 2.0);
+            double b = prevCenter.y - m * prevCenter.x;
+
+            //using the line equation, we find the point along the prev room where the line exists
+            Vector2Int start;
+            int direction;
+            if (Math.Abs(m) >= 1)
+            {
+                if (angle < 90 || angle > 270)
+                {
+                    direction = Room.TOP;
+                    start = new Vector2Int((int)Math.Round((prev.top - b) / m), prev.top);
+                }
+                else
+                {
+                    direction = Room.BOTTOM;
+                    start = new Vector2Int((int)Math.Round((prev.bottom - b) / m), prev.bottom);
+                }
+            }
+            else
+            {
+                if (angle < 180)
+                {
+                    direction = Room.RIGHT;
+                    start = new Vector2Int(prev.right, (int)Math.Round(m * prev.right + b));
+                }
+                else
+                {
+                    direction = Room.LEFT;
+                    start = new Vector2Int(prev.left, (int)Math.Round(m * prev.left + b));
+                }
+            }
+
+            //cap it to a valid connection point for most rooms
+            if (direction == Room.TOP || direction == Room.BOTTOM)
+            {
+                start.x = (int)GameMath.gate(prev.left + 1, start.x, prev.right - 1);
+            }
+            else
+            {
+                start.y = (int)GameMath.gate(prev.top + 1, start.y, prev.bottom - 1);
+            }
+
+            //space checking
+            RectInt space = FindFreeSpace(start, collision, Math.Max(next.MaxWidth, next.MaxHeight);
+            if (!next.SetSizeWithLimit(space.width + 1, space.height + 1))
+            {
+                return -1;
+            }
+
+            //find the ideal center for this new room using the line equation and known dimensions
+            Vector2 targetCenter = new();
+            if (direction == Room.TOP)
+            {
+                targetCenter.y = prev.top - (next.Height - 1) / 2f;
+                targetCenter.x = (float)((targetCenter.y - b) / m);
+                next.SetPos((int)Math.Round(targetCenter.x - (next.Width - 1) / 2f ), prev.top - (next.Height - 1));
+
+            }
+            else if (direction == Room.BOTTOM)
+            {
+                targetCenter.y = prev.bottom + (next.Height - 1) / 2f;
+                targetCenter.x = (float)((targetCenter.y - b) / m);
+                next.SetPos((int)Math.Round(targetCenter.x - (next.Width - 1) / 2f), prev.bottom);
+
+            }
+            else if (direction == Room.RIGHT)
+            {
+                targetCenter.x = prev.right + (next.Width - 1) / 2f;
+                targetCenter.y = (float)(m * targetCenter.x + b);
+                next.SetPos(prev.right, (int)Math.Round(targetCenter.y - (next.Height - 1) / 2f));
+
+
+            }
+            else if (direction == Room.LEFT)
+            {
+                targetCenter.x = prev.left - (next.Width - 1) / 2f;
+                targetCenter.y = (float)(m * targetCenter.x + b);
+                next.SetPos(prev.left - (next.Width - 1), (int)Math.Round(targetCenter.y - (next.Height - 1) / 2f));
+
+            }
+
+            //perform connection bounds and target checking, move the room if necessary
+            if (direction == Room.TOP || direction == Room.BOTTOM)
+            {
+                if (next.right < prev.left + 2) next.Shift(prev.left + 2 - next.right, 0);
+                else if (next.left > prev.right - 2) next.Shift(prev.right - 2 - next.left, 0);
+
+                if (next.right > space.right()) next.Shift(space.right() - next.right, 0);
+                else if (next.left < space.left()) next.Shift(space.left() - next.left, 0);
+            }
+            else
+            {
+                if (next.bottom < prev.top + 2) next.Shift(0, prev.top + 2 - next.bottom);
+                else if (next.top > prev.bottom - 2) next.Shift(0, prev.bottom - 2 - next.top);
+
+                if (next.bottom > space.bottom()) next.Shift(0, space.bottom() - next.bottom);
+                else if (next.top < space.top()) next.Shift(0, space.top() - next.top);
+            }
+
+            //attempt to connect, return the result angle if successful.
+            if (next.Connect(prev))
+            {
+                return AngleBetweenRooms(prev, next);
+            }
+            else
+            {
+                return -1;
+            }
         }
 
     }

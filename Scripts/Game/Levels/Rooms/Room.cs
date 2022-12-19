@@ -6,13 +6,14 @@ using System.Drawing;
 //using System.Drawing;
 using UnityEngine;
 using Utils;
+using DungeonInstance;
 
 namespace Levels.Rooms
 {
     public abstract class Room
     {
-        public List<Room> neighbors = new List<Room>();
-        public Dictionary<Room, Door> connected = new Dictionary<Room, Door>();
+        public List<Room> neighbors = new();
+        public Dictionary<Room, Door> connected = new();
         public int distance;
         public int price = 1;
         public int left, top, right, bottom;
@@ -33,7 +34,7 @@ namespace Levels.Rooms
             bottom = r.yMax;
         }
 
-        public Room zero() => Set(0, 0, 0, 0);
+        public Room zero => Set(0, 0, 0, 0);
 
         public Room Set( int left, int top, int right, int bottom)
         {
@@ -65,6 +66,12 @@ namespace Levels.Rooms
             }
             return this;
         }
+
+        //TODO: consider making RoomUtils...?
+        public Room SetPos(int x, int z) => Set(x, z, x + (right - left), z + (bottom - top));
+
+        public Room Shift(int x, int z) => Set(left + x, top + z, right + x, bottom + z);
+
 
         // **** Spatial logic ****
 
@@ -396,7 +403,7 @@ namespace Levels.Rooms
         }
 
         //whether or not a character can be placed here (usually via spawn, tele, or wander)
-        public bool CanPlaceCharacter(Vector2Int p, Level l)
+        public virtual bool CanPlaceCharacter(Vector2Int p, Level l)
         {
             return Inside(p);
         }
@@ -487,10 +494,27 @@ namespace Levels.Rooms
 
     }
 
+    
+
     public enum SizeCategory
     {
         [SizeCategoryAttr(4, 10, 1)] Normal,
         [SizeCategoryAttr(10, 14, 2)] Large,
         [SizeCategoryAttr(14, 18, 3)] Giant
+    }
+
+    public class RoomTypeAttr : Attribute
+    {
+        internal RoomTypeAttr(float weight, int region)
+        {
+            this.weight = weight;
+            this.region = region;
+        }
+
+
+        public float weightAtLevel => (region == Dungeon.region || region == 0) ? weight : 0;
+        public bool usableInRegion => (region == Dungeon.region || region == 0);
+        public float weight { get; private set; }
+        public int region { get; private set; }
     }
 }

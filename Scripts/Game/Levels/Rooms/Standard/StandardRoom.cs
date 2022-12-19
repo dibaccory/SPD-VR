@@ -61,24 +61,7 @@ namespace Levels.Rooms.Standard
         public override int MaxHeight =>  sizeCat.GetAttribute<SizeCategoryAttr>().MaxDim;
 
         public int ConnectionWeight => ((int)sizeCat+1) * ((int)sizeCat + 1);
-
-
-        //private static List<StandardRoom> roomTypes = new List<StandardRoom>();
-
-        public class RoomTypeAttr : Attribute
-        {
-            internal RoomTypeAttr(float weight, int region)
-            {
-                this.weight = weight;
-                this.region = region;
-            }
-            
-
-            public float weightAtLevel => (region == Dungeon.region || region == 0) ? weight : 0;
-            public bool usableInRegion => (region == Dungeon.region || region == 0);
-            public float weight { get; private set; }
-            public int region { get; private set; }
-        }
+   
 
         private enum RoomType
         {
