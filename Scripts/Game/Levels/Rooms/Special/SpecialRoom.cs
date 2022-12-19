@@ -39,7 +39,7 @@ namespace Levels.Rooms.Special
             //    //60% chance for front of queue, 30% chance for next, 10% for one after that
                 int index = RandomNumberGenerator.Chances(new float[]{6, 3, 1});
                 //while (index >= floorSpecials.size()) index--;
-                string chosenRoomName = Enum.GetNames(typeof(RoomType))[RandomNumberGenerator.Chances(roomWeights)];
+                string chosenRoomName = Enum.GetNames(typeof(RoomType))[index];
                 var chosenRoomClass = Type.GetType(RoomType.PitRoom.ToString());
                 return (SpecialRoom)Activator.CreateInstance(chosenRoomClass); //Reflection.newInstance(floorSpecials.get( index ));
 
@@ -82,17 +82,17 @@ namespace Levels.Rooms.Special
 
            	//only one special that uses crystal keys per floor
             PitRoom,
-            CrystalVaultRoom,
-            CrystalChoiceRoom,
-            CrystalPathRoom,
+            //CrystalVaultRoom,
+            //CrystalChoiceRoom,
+            //CrystalPathRoom,
 
             //only one special that generates a potion per floor
-            PoolRoom,
-            SentryRoom,
-            StorageRoom,
-            ToxicGasRoom,
-            MagicalFireRoom,
-            TrapsRoom
+            //PoolRoom,
+            //SentryRoom,
+            //StorageRoom,
+            //ToxicGasRoom,
+            //MagicalFireRoom,
+            //TrapsRoom
         }
     }
 }

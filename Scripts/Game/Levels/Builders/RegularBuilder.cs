@@ -74,7 +74,7 @@ namespace Levels.Builders
         {
             foreach (Room r in rooms)
             {
-                r.zero();
+                r.Zero();
             }
 
             entrance = exit = shop = null;
@@ -86,7 +86,7 @@ namespace Levels.Builders
                 Type rType = r.GetType();
                 if (rType.IsInstanceOfType(typeof(EntranceRoom))) entrance = r;
                 else if (rType.IsInstanceOfType(typeof(ExitRoom))) exit = r;
-                else if (rType.IsInstanceOfType(typeof(ShopRoom)) && r.MaxConnections(Room.ALL) == 1) shop = r;
+                // TODO make ShopRoom else if (rType.IsInstanceOfType(typeof(ShopRoom)) && r.MaxConnections(Room.ALL) == 1) shop = r;
                 else if (r.MaxConnections(Room.ALL) > 1) multiConnections.Add(r);
                 else if (r.MaxConnections(Room.ALL) == 1) singleConnections.Add(r);
             }
@@ -120,7 +120,7 @@ namespace Levels.Builders
 
         // *** Branch Placement ***
 
-        void WeightRooms(List<Room> rooms)
+        protected void WeightRooms(List<Room> rooms)
         {
             foreach (Room r in rooms)
             {
@@ -168,7 +168,7 @@ namespace Levels.Builders
 
                 for (int j = 0; j < connectingRooms; j++)
                 {
-                    ConnectionRoom t = isSecretRoom ? new MazeConnectionRoom() : ConnectionRoom.createRoom();
+                    ConnectionRoom t = isSecretRoom ? new MazeConnectionRoom() : ConnectionRoom.Create();
                     tries = 3;
 
                     do
@@ -179,7 +179,7 @@ namespace Levels.Builders
 
                     if (angle == -1)
                     {
-                        t.clearConnections();
+                        t.ClearConnections();
                         foreach (Room c in connectingRoomsThisBranch)
                         {
                             c.ClearConnections();
@@ -244,6 +244,6 @@ namespace Levels.Builders
             }
         }
 
-        protected float RandomBranchAngle(Room r) => (float)RandomNumberGenerator.Double((double)360);
+        protected virtual float RandomBranchAngle(Room r) => (float)RandomNumberGenerator.Double((double)360);
     }
 }

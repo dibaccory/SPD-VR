@@ -30,16 +30,18 @@ namespace Levels.Rooms.Standard
 			//level.Transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
 		}
 
-		public override bool CanPlaceCharacter(Vector2Int p, Level l) {
-		return base.CanPlaceCharacter(p, l) && l.XYToCell(p) != l.Exit();
-	}
+		public override bool CanPlaceCharacter(Vector2Int p, Level l)
+		{
+			return base.CanPlaceCharacter(p, l) && l.XYToCell(p) != l.Exit();
+		}
 
-		public override bool Connect(Room room) {
-		//cannot connect to entrance, otherwise works normally
-		if (Room.InstanceOf<EntranceRoom>(room))   return false;
-		else                            return base.Connect(room);
+		public override bool Connect(Room room)
+		{
+			//cannot connect to entrance, otherwise works normally
+			if (Room.InstanceOf<EntranceRoom>(room))   return false;
+			else                            return base.Connect(room);
 		}
-		}
+		
 	}
 
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Utils;
+namespace Utils
 {
 	public class Tools
 	{

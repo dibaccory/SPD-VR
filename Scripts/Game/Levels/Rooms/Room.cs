@@ -34,7 +34,7 @@ namespace Levels.Rooms
             bottom = r.yMax;
         }
 
-        public Room zero => Set(0, 0, 0, 0);
+        public Room Zero() => Set(0, 0, 0, 0);
 
         public Room Set( int left, int top, int right, int bottom)
         {

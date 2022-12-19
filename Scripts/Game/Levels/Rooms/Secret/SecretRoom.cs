@@ -14,11 +14,11 @@ namespace Levels.Rooms.Secret
 		public static void initForRun()
 		{
 
-			float[] regionChances = baseRegionSecrets.clone();
+			float[] regionChances = (float[])baseRegionSecrets.Clone();
 
-			for (int i = 0; i < regionSecretsThisRun.length; i++){
+			for (int i = 0; i < regionSecretsThisRun.Length; i++){
 				regionSecretsThisRun[i] = (int)regionChances[i];
-				if (Random.Float() < regionChances[i] % 1f){
+				if (RandomNumberGenerator.Double() < regionChances[i] % 1f){
 					regionSecretsThisRun[i]++;
 				}
 			}

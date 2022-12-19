@@ -184,29 +184,29 @@ namespace Utils
         //    }
 
         //    //@SafeVarargs
-        //public static<T> T oneOf(T...array )
-        //    {
-        //        return array[Int(array.length)];
-        //    }
+        public static T OneOf<T>(params T[] array )
+        {
+            return array[Int(array.Length)];
+        }
 
-        //    public static<T> T element(T[] array)
-        //    {
-        //        return element(array, array.length);
-        //    }
+        public static T Element<T>(T[] array)
+        {
+            return element(array, array.Length);
+        }
 
-        //    public static<T> T element(T[] array, int max)
-        //    {
-        //        return array[Int(max)];
-        //    }
+        public static T element<T>(T[] array, int max)
+        {
+            return array[Int(max)];
+        }
 
-        //    @SuppressWarnings("unchecked")
-        //public static<T> T element(Collection<? extends T> collection)
-        //{
-        //    int size = collection.size();
-        //    return size > 0 ?
-        //        (T)collection.toArray()[Int(size)] :
-        //        null;
-        //}
+        //@SuppressWarnings("unchecked")
+        public static T Element<T>(List<T> collection)
+        {
+            int size = collection.Count();
+            return size > 0 ?
+                collection[Int(size)] :
+                default;
+        }
 
         public static void Shuffle<T>(List<T> list)
         {

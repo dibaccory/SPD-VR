@@ -79,11 +79,9 @@ namespace Levels.Rooms.Standard
 			RandomNumberGenerator.AddGenerator();
 
 		}
-        //cannot connect to exit, otherwise works normally
-        public override bool Connect(Room room) =>
-			(Room.InstanceOf<ExitRoom>(room)) ? false : base.Connect(room);
-
-		}
+		//cannot connect to exit, otherwise works normally
+		public override bool Connect(Room room) =>
+		InstanceOf<ExitRoom>(room) ? false : base.Connect(room);
 	}
 
 }

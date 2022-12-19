@@ -1,6 +1,6 @@
 ﻿using System;
 using Levels;
-using Terrain;
+using TileInfo;
 using Levels.Painters;
 using Levels.Rooms;
 

@@ -57,7 +57,7 @@ namespace Levels.Builders
                 int closestDiff = Int32.MaxValue;
                 bool inside = true;
                 int curDiff = 0;
-                foreach (Room curRoom in colliding)
+                foreach(Room curRoom in colliding)
                 {
 
                     if (start.x <= curRoom.left)
@@ -151,10 +151,10 @@ namespace Levels.Builders
         {
             Vector2 fromCenter = new((from.left + from.right) / 2f, (from.top + from.bottom) / 2f);
             Vector2 toCenter = new((to.left + to.right) / 2f, (to.top + to.bottom) / 2f);
-            return AngleBetweenVector2Ints(fromCenter, toCenter);
+            return AngleBetweenRoomCenters(fromCenter, toCenter);
         }
 
-        protected static float AngleBetweenVector2Ints(Vector2 from, Vector2 to)
+        protected static float AngleBetweenRoomCenters(Vector2 from, Vector2 to)
         {
             double m = (to.y - from.y) / (to.x - from.x);
 

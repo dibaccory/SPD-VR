@@ -6,11 +6,13 @@ namespace DungeonInstance
 {
     public class Dungeon
     {
-        Dungeon()
-        {
 
-        }
-
+        //determines path the hero is on. Current uses:
+        // 0 is the default path
+        // Other numbers are currently unused
+        public int branch;
+        public int gold;
+        public int energy;
         public int challenges;
         public int mobsToChampion;
 
@@ -32,21 +34,24 @@ namespace DungeonInstance
             HALLS
         }
 
+        public float[][] standardRoomChances = new float[27][];
 
-        //determines path the hero is on. Current uses:
-        // 0 is the default path
-        // Other numbers are currently unused
-        public int branch;
-
-        public int gold;
-        public int energy;
-
-
-        public static float[][] standardRoomChances = new float[27][];
-
-        void Init()
+        public Dungeon()
         {
-            depth = 1;
+          depth = 1;
+          branch = 0;
+          gold = 0;
+          energy = 0;
+          level = null;
+          Start();
+        }
+
+
+        void Start()
+        {
+            //Load saved details if(level == null) then create new level
+            level = new SewerLevel();
+            level.Create();
         }
 
     }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Levels.Rooms;
 using Utils;
-using Terrain;
+using TileInfo;
 
 namespace Levels.Features
 {

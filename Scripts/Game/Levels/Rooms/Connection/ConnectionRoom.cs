@@ -1,5 +1,7 @@
 ﻿using System;
 using Levels.Rooms;
+using DungeonInstance;
+using Utils;
 
 namespace Levels.Rooms.Connection
 {
@@ -52,8 +54,22 @@ namespace Levels.Rooms.Connection
 		// 	chances[26] = chances[25] = chances[24] = chances[23] = chances[22];
 		// }
 
-		//public static ConnectionRoom Create(){
-		//	//return Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));
-		//}
+		private enum RoomType
+		{
+			[RoomTypeAttr(0,0)]TunnelRoom,
+			[RoomTypeAttr(0,0)]BridgeRoom,
+			[RoomTypeAttr(0,0)]PerimeterRoom,
+			[RoomTypeAttr(0,0)]WalkwayRoom,
+			[RoomTypeAttr(0,0)]RingTunnelRoom,
+			[RoomTypeAttr(0,0)]RingBridgeRoom,
+		}
+
+		public static ConnectionRoom Create()
+		{
+			string chosenRoomName = Enum.GetNames(typeof(RoomType))[RandomNumberGenerator.Chances(new float[] {0,0,0})];
+			var chosenRoomClass = Type.GetType(chosenRoomName);
+
+			return (ConnectionRoom)Activator.CreateInstance(chosenRoomClass);
+		}
 	}
 }

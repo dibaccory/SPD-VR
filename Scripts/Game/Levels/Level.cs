@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-//using System.Drawing;
+using Utils;
 using TileInfo;
 
 
@@ -101,7 +101,7 @@ namespace Levels
             CreateMobs();
             CreateItems();
 
-            //Random.popGenerator();
+            RandomNumberGenerator.PopGenerator();
         }
 
         public void SetSize(int w, int h)
