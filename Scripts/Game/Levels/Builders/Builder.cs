@@ -34,23 +34,24 @@ namespace Levels.Builders
             RectInt space = new(start.x - maxSize, start.y - maxSize, start.x + maxSize, start.y + maxSize);
 
             //shallow copy
-            List<Room> colliding = new List<Room>(collision);
+            List<Room> colliding = collision.GetRange(0, collision.Count);
             do
             {
 
                 //remove empty rooms and any rooms we aren't currently overlapping
-                IEnumerator<Room> it = (IEnumerator<Room>)colliding;
-                do
+                //IEnumerator<Room> it = colliding.GetEnumerator();
+                for(int i = 0; i < colliding.Count; i++)
                 {
-                    Room room = it.Current; //TODO ENSURE variable colliding is not empty
+                    Room room = colliding[i];
                     //if not colliding
                     if (room.IsEmpty
                             || Math.Max(space.x, room.left) >= Math.Min(space.xMax, room.right)
                             || Math.Max(space.y, room.top) >= Math.Min(space.yMax, room.bottom))
                     {
-                        it.Dispose();
+                        colliding.Remove(room);
+                        i--;
                     }
-                } while (it.MoveNext());
+                }
 
                 //iterate through all rooms we are overlapping, and find the closest one
                 Room closestRoom = null;

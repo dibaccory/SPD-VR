@@ -83,9 +83,10 @@ namespace Levels.Builders
             multiConnections.Clear();
             foreach (Room r in rooms)
             {
-                Type rType = r.GetType();
-                if (rType.IsInstanceOfType(typeof(EntranceRoom))) entrance = r;
-                else if (rType.IsInstanceOfType(typeof(ExitRoom))) exit = r;
+                //Type rType = r.GetType();
+                //Type entr = typeof(EntranceRoom);
+                if (r is EntranceRoom) entrance = r;
+                else if (r is ExitRoom) exit = r;
                 // TODO make ShopRoom else if (rType.IsInstanceOfType(typeof(ShopRoom)) && r.MaxConnections(Room.ALL) == 1) shop = r;
                 else if (r.MaxConnections(Room.ALL) > 1) multiConnections.Add(r);
                 else if (r.MaxConnections(Room.ALL) == 1) singleConnections.Add(r);

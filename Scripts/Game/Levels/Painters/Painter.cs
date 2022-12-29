@@ -61,5 +61,34 @@ namespace Levels.Painters
         {
             Fill(level, room.left + l, room.top + t, room.Width - (l + r), room.Height - (t + b), value);
         }
+
+        public static void DrawLine(Level level, Vector2Int from, Vector2Int to, Tile value)
+        {
+            float x = from.x;
+            float y = from.y;
+            float dx = to.x - from.x;
+            float dy = to.y - from.y;
+
+            bool movingbyX = Math.Abs(dx) >= Math.Abs(dy);
+            //normalize
+            if (movingbyX)
+            {
+                dy /= Math.Abs(dx);
+                dx /= Math.Abs(dx);
+            }
+            else
+            {
+                dx /= Math.Abs(dy);
+                dy /= Math.Abs(dy);
+            }
+
+            Set(level, (int)Math.Round(x), (int)Math.Round(y), value);
+            while ((movingbyX && to.x != x) || (!movingbyX && to.y != y))
+            {
+                x += dx;
+                y += dy;
+                Set(level, (int)Math.Round(x), (int)Math.Round(y), value);
+            }
+        }
     }
 }

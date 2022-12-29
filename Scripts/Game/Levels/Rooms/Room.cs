@@ -17,6 +17,7 @@ namespace Levels.Rooms
         public int distance;
         public int price = 1;
         public int left, top, right, bottom;
+        public RectInt rect => new RectInt(left, top, Width, Height);
 
         //+1 Because Rooms are inclusive to their right and bottom
         public int Width { get => right - left + 1; set => Width = value; }
@@ -177,10 +178,10 @@ namespace Levels.Rooms
         public static readonly int RIGHT = 3;
         public static readonly int BOTTOM = 4;
 
-        //public Room Intersect(Room other)
+        //public RectInt ToRectInt(Room other)
         //{
         //   return 
-        //        (
+        //        new this(
         //            Math.Max(left, other.left),
         //            Math.Max(top, other.top),
         //            Math.Min(right, other.right),
@@ -269,7 +270,7 @@ namespace Levels.Rooms
                 return false;
         }
 
-        public bool CanMerge(Level l, Point p, Tile mergeTerrain)
+        public bool CanMerge(Level l,Vector2Int p, Tile mergeTerrain)
         {
             return false;
         }

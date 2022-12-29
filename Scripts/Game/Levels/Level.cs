@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utils;
 using TileInfo;
+using DungeonInstance;
 
 
 namespace Levels
@@ -47,7 +48,7 @@ namespace Levels
         //public bool[] avoid;
         //public bool[] water;
         //public bool[] pit;
-       
+
         public Feeling feeling = Feeling.NONE;
         public int entrance;
         public int exit;
@@ -73,15 +74,16 @@ namespace Levels
 
         public Vector2Int CellToXY(int cell) => new(cell % Width, cell / Width);
         public int XYToCell(Vector2Int p) => p.x + p.y * Width;
-       
+
 
         public void Create()
         {
+            RandomNumberGenerator.AddGenerator(Dungeon.SeedCurDepth());
             //TODO if (NOT Boss Level..) Line 190
 
             do
             {
-                Width = Height = Length = 0;
+                Width = Height = 0;
 
                 //transitions = new ArrayList<>();
 
@@ -172,7 +174,7 @@ namespace Levels
        //public LevelTransition getTransition(LevelTransition.Type type {}
 
        //public LevelTransition getTransition(int cell)
- 
+
 
         public void Seal()
         {
@@ -234,6 +236,9 @@ namespace Levels
         //    }
         //    return null;
         //}
-
+        public Tile TunnelTile()
+        {
+            return feeling == Feeling.CHASM ? Tile.EmptySp : Tile.Empty;
+        }
     }
 }

@@ -56,7 +56,7 @@ namespace Levels.Rooms.Connection
 
 		private enum RoomType
 		{
-			[RoomTypeAttr(0,0)]TunnelRoom,
+			[RoomTypeAttr(20,0)]TunnelRoom,
 			[RoomTypeAttr(0,0)]BridgeRoom,
 			[RoomTypeAttr(0,0)]PerimeterRoom,
 			[RoomTypeAttr(0,0)]WalkwayRoom,
@@ -66,8 +66,8 @@ namespace Levels.Rooms.Connection
 
 		public static ConnectionRoom Create()
 		{
-			string chosenRoomName = Enum.GetNames(typeof(RoomType))[RandomNumberGenerator.Chances(new float[] {0,0,0})];
-			var chosenRoomClass = Type.GetType(chosenRoomName);
+			string chosenRoomName = Enum.GetNames(typeof(RoomType))[RandomNumberGenerator.Chances(new float[] {20,0,0,0,0,0,0})];
+			var chosenRoomClass = Type.GetType("Levels.Rooms.Connection." + chosenRoomName);
 
 			return (ConnectionRoom)Activator.CreateInstance(chosenRoomClass);
 		}

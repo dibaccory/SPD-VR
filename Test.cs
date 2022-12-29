@@ -1,18 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using static DungeonGenerator;
 
-public class Test : MonoBehaviour
+
+public class Test 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        Console.WriteLine("beep");
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

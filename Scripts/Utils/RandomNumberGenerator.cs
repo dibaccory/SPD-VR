@@ -13,7 +13,7 @@ namespace Utils
         //we store a stack of random number generators, which may be seeded deliberately or randomly.
         //top of the stack is what is currently being used to generate new numbers.
         //the base generator is always created with no seed, and cannot be popped.
-        private static List<Random> generators;
+        private static List<Random> generators = new List<Random> { new Random() };
         //TODO INITIALIZE resetGenerators();
 
 
@@ -58,7 +58,7 @@ namespace Utils
         //returns a uniformly distributed double in the range [0, 1)
         public static double Double()
         {
-            return generators.Last().NextDouble();
+            return generators[^1].NextDouble();
         }
 
         //returns a uniformly distributed double in the range [0, max)
@@ -82,7 +82,7 @@ namespace Utils
         //returns a uniformly distributed int in the range [0, max)
         public static int Int(int max)
         {
-            return max > 0 ? generators.Last().Next() : 0;
+            return max > 0 ? generators[^1].Next() : 0;
         }
         //returns a uniformly distributed int in the range [min, max)
         public static int Int(int min, int max)
@@ -106,7 +106,7 @@ namespace Utils
         public static long Long()
         {
             var buffer = new byte[sizeof(long)];
-            generators.Last().NextBytes(buffer);
+            generators[^1].NextBytes(buffer);
             return BitConverter.ToInt64(buffer, 0);
         }
 
@@ -191,10 +191,11 @@ namespace Utils
 
         public static T Element<T>(T[] array)
         {
-            return element(array, array.Length);
+            return Element(array, array.Length);
+            
         }
 
-        public static T element<T>(T[] array, int max)
+        public static T Element<T>(T[] array, int max)
         {
             return array[Int(max)];
         }

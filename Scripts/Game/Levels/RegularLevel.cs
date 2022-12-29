@@ -19,18 +19,20 @@ namespace Levels
         
         protected override bool Build()
         {
+            builder = Builder();
             List<Room> initRooms = CreateRooms();
             RandomNumberGenerator.Shuffle(initRooms);
 
             do
             {
-        			foreach(Room r in initRooms)
-              {
+                foreach(Room r in initRooms)
+                {
         				r.neighbors.Clear();
         				r.connected.Clear();
-        			}
-        			rooms = builder.Build(new List<Room>(initRooms));
-        		} while (rooms == null);
+        		}
+        	    rooms = builder.Build(new List<Room>(initRooms));
+                //Console.WriteLine("{0}      ----    {1}",rooms);
+        	} while (rooms == null);
 
             return false; //create RegularPainter.paint()
         }
@@ -56,10 +58,12 @@ namespace Levels
                 {
                     s = StandardRoom.Create();
                 } while (!s.SetSizeCat(standards - i));
+                Console.WriteLine("We have escaped with a room! {0,3}", s.ToString());
                 i += s.sizeCat.GetAttribute<SizeCategoryAttr>().RoomValue - 1;
                 initRooms.Add(s);
+                Console.WriteLine("initRooms count {0}", initRooms.Count);
             }
-
+            Console.WriteLine("WE GOT ALL THE INIT ROOMS");
             return initRooms;
         }
 
@@ -89,7 +93,7 @@ namespace Levels
 
       	}
 
-        // TODO: protected abstract Painter Painter();
+        protected abstract Painter Painter();
 
         protected virtual int StandardRooms(bool forceMax) { return 0; }
 

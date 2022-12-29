@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
+//using System.Linq;
 using UnityEngine;
 using Utils;
 using TileInfo;
@@ -12,7 +13,7 @@ namespace Levels.Rooms.Standard
     public abstract class StandardRoom : Room
     {
         public SizeCategory sizeCat;
-        static RoomType roomType;
+        static readonly RoomType roomType;
 
         //Note that if a room wishes to allow itself to be forced to a certain size category,
         //but would (effectively) never roll that size category, consider using Float.MIN_VALUE
@@ -67,9 +68,9 @@ namespace Levels.Rooms.Standard
         {
             [RoomTypeAttr(10,0)]EmptyRoom,
 
-            [RoomTypeAttr(10,1)]SewerPipeRoom,
-            [RoomTypeAttr(10,1)]RingRoom,
-            [RoomTypeAttr(5,1)]CircleBasinRoom,
+            //[RoomTypeAttr(10,1)]SewerPipeRoom,
+            //[RoomTypeAttr(10,1)]RingRoom,
+            //[RoomTypeAttr(5,1)]CircleBasinRoom,
 
             [RoomTypeAttr(10,2)]SegmentedRoom,
             [RoomTypeAttr(10,2)]PillarsRoom,
@@ -86,38 +87,61 @@ namespace Levels.Rooms.Standard
             [RoomTypeAttr(10,5)]RuinsRoom,
             [RoomTypeAttr(10,5)]ChasmRoom,
             [RoomTypeAttr(5,5)]SkullsRoom,
-
-            [RoomTypeAttr(1,0)]PlantsRoom,
-            [RoomTypeAttr(1,0)]AquariumRoom,
-            [RoomTypeAttr(1,0)]PlatformRoom,
-            [RoomTypeAttr(1,0)]BurnedRoom,
-            [RoomTypeAttr(1,0)]FissureRoom,
-            [RoomTypeAttr(1,0)]GrassyGraveRoom,
-            [RoomTypeAttr(1,0)]StripedRoom,
-            [RoomTypeAttr(1,0)]StudyRoom,
-            [RoomTypeAttr(1,0)]SuspiciousChestRoom,
-            [RoomTypeAttr(1,0)]MinefieldRoom
+            //TODO ADD ROOMS WHEN PROCEDURAL GEN IS DONE
+            //[RoomTypeAttr(1,0)]PlantsRoom,
+            //[RoomTypeAttr(1,0)]AquariumRoom,
+            //[RoomTypeAttr(1,0)]PlatformRoom,
+            //[RoomTypeAttr(1,0)]BurnedRoom,
+            //[RoomTypeAttr(1,0)]FissureRoom,
+            //[RoomTypeAttr(1,0)]GrassyGraveRoom,
+            //[RoomTypeAttr(1,0)]StripedRoom,
+            //[RoomTypeAttr(1,0)]StudyRoom,
+            //[RoomTypeAttr(1,0)]SuspiciousChestRoom,
+            //[RoomTypeAttr(1,0)]MinefieldRoom
 
         }
 
         public static StandardRoom Create()
         {
+
+            //Console.WriteLine("DUNGEON REGION --- ", Dungeon.region);
+            //Console.WriteLine("DUNGEON DEPTH --- ", Dungeon.depth);
             //Filter RoomTypes to only applicable types in current region of the dungeon
-            RoomTypeAttr[] applicableRoomTypes = (RoomTypeAttr[])Enum
-                .GetValues(typeof(RoomType))
-                .OfType<RoomTypeAttr>()
-                .Where( r => r.usableInRegion );
+            //RoomTypeAttr[] applicableRoomTypes = (RoomTypeAttr[])Enum
+            //    .GetValues(typeof(RoomType))
+            //    .OfType<RoomTypeAttr>()
+            //    .Where( r => r.usableInRegion );
+
+            // Create a list to store the applicable room types
+            List<RoomTypeAttr> applicableRoomTypes = new();
+
+            // Iterate over the values of the RoomType enum
+            foreach (RoomType e in Enum.GetValues(typeof(RoomType)))
+            {
+                // Get the RoomTypeAttr attribute for the room type
+
+                RoomTypeAttr usableRoomType = e.GetAttribute<RoomTypeAttr>();
+       
+                
+                if (usableRoomType.usableInRegion)
+                {
+                    // Add the attribute to the list if it's usable in the region
+                    applicableRoomTypes.Add(usableRoomType);
+
+                }
+            }
+
 
             //Convert to float[] for RNG.Chances
             float[] roomWeights = Array.ConvertAll
                 (
-                    applicableRoomTypes,
+                    applicableRoomTypes.ToArray(),
                     new Converter<RoomTypeAttr, float>( r => r.weight )
                 );
-
+            
             string chosenRoomName = Enum.GetNames(typeof(RoomType))[RandomNumberGenerator.Chances(roomWeights)];
-            var chosenRoomClass = Type.GetType(chosenRoomName);
-
+            var chosenRoomClass = Type.GetType("Levels.Rooms.Standard."+chosenRoomName);
+            //Console.WriteLine("chosenRoomName {0} ---- chosenRoomClass --- {1}", chosenRoomName, chosenRoomClass.ToString());
             return (StandardRoom)Activator.CreateInstance(chosenRoomClass);
         }
 
