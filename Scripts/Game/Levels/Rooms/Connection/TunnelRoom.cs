@@ -5,7 +5,6 @@ using Levels.Rooms;
 using DungeonInstance;
 using Utils;
 using Levels.Painters;
-using System.Drawing;
 using UnityEngine;
 
 namespace Levels.Rooms.Connection
@@ -21,7 +20,7 @@ namespace Levels.Rooms.Connection
 
             Tile floor = level.TunnelTile();
 
-            RectInt c = GetConnectionSpace();
+            Rectangle c = GetConnectionSpace();
 
             foreach (Door door in connected.Values)
             {
@@ -39,12 +38,12 @@ namespace Levels.Rooms.Connection
                 int rightShift;
                 int downShift;
 
-                if (start.x < c.x) rightShift = c.x - start.x;
-                else if (start.x > c.xMax) rightShift = c.xMax - start.x;
+                if (start.x < c.left) rightShift = c.left - start.x;
+                else if (start.x > c.right) rightShift = c.right - start.x;
                 else rightShift = 0;
 
-                if (start.y < c.y) downShift = c.y - start.y;
-                else if (start.y > c.yMax) downShift = c.yMax - start.y;
+                if (start.y < c.top) downShift = c.top - start.y;
+                else if (start.y > c.bottom) downShift = c.bottom - start.y;
                 else downShift = 0;
 
                 //always goes inward first
@@ -68,11 +67,11 @@ namespace Levels.Rooms.Connection
 
         //returns the space which all doors must connect to (usually 1 cell, but can be more)
         //Note that, like rooms, this space is inclusive to its right and bottom sides
-        protected RectInt GetConnectionSpace()
+        protected Rectangle GetConnectionSpace()
         {
             Vector2Int c = GetDoorCenter();
 
-            return new RectInt(c.x, c.y, c.x, c.y);
+            return new Rectangle(c.x, c.y, c.x, c.y);
         }
 
         //returns a point equidistant from all doors this room has

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Levels.Rooms;
 using UnityEngine;
 using Utils;
@@ -29,9 +28,9 @@ namespace Levels.Builders
         }
 
         //returns a rectangle representing the maximum amount of free space from a specific start point
-        protected static RectInt FindFreeSpace(Vector2Int start, List<Room> collision, int maxSize)
+        protected static Rectangle FindFreeSpace(Vector2Int start, List<Room> collision, int maxSize)
         {
-            RectInt space = new(start.x - maxSize, start.y - maxSize, start.x + maxSize, start.y + maxSize);
+            Rectangle space = new(start.x - maxSize, start.y - maxSize, start.x + maxSize, start.y + maxSize);
 
             //shallow copy
             List<Room> colliding = collision.GetRange(0, collision.Count);
@@ -44,9 +43,9 @@ namespace Levels.Builders
                 {
                     Room room = colliding[i];
                     //if not colliding
-                    if (room.IsEmpty
-                            || Math.Max(space.x, room.left) >= Math.Min(space.xMax, room.right)
-                            || Math.Max(space.y, room.top) >= Math.Min(space.yMax, room.bottom))
+                    if (room.IsEmpty()
+                            || Math.Max(space.left, room.left) >= Math.Min(space.right, room.right)
+                            || Math.Max(space.top, room.top) >= Math.Min(space.bottom, room.bottom))
                     {
                         colliding.Remove(room);
                         i--;
@@ -101,36 +100,20 @@ namespace Levels.Builders
                 if (closestRoom != null)
                 {
 
-                    wDiff = Int32.MaxValue;
-                    if (closestRoom.left >= start.x)
-                    {
-                        wDiff = (space.xMax - closestRoom.left) * (space.height + 1);
-                    }
-                    else if (closestRoom.right <= start.x)
-                    {
-                        wDiff = (closestRoom.right - space.x) * (space.height + 1);
-                    }
-
-                    hDiff = Int32.MaxValue;
-                    if (closestRoom.top >= start.y)
-                    {
-                        hDiff = (space.yMax - closestRoom.top) * (space.width + 1);
-                    }
-                    else if (closestRoom.bottom <= start.y)
-                    {
-                        hDiff = (closestRoom.bottom - space.y) * (space.width + 1);
-                    }
+                    wDiff = Math.Abs(space.right - closestRoom.left) * (space.height + 1);
+                    hDiff = Math.Abs(space.bottom - closestRoom.top) * (space.width + 1);
+                    
 
                     //reduce by as little as possible to resolve the collision
                     if (wDiff < hDiff || wDiff == hDiff && RandomNumberGenerator.Int(2) == 0)
                     {
-                        if (closestRoom.left >= start.x && closestRoom.left < space.xMax) space.xMax = closestRoom.left;
-                        if (closestRoom.right <= start.x && closestRoom.right > space.x) space.x = closestRoom.right;
+                        if (closestRoom.left >= start.x && closestRoom.left < space.right) space.right = closestRoom.left;
+                        if (closestRoom.right <= start.x && closestRoom.right > space.left) space.left = closestRoom.right;
                     }
                     else
                     {
-                        if (closestRoom.top >= start.y && closestRoom.top < space.yMax) space.yMax = closestRoom.top;
-                        if (closestRoom.bottom <= start.y && closestRoom.bottom > space.y) space.y = closestRoom.bottom;
+                        if (closestRoom.top >= start.y && closestRoom.top < space.bottom) space.bottom = closestRoom.top;
+                        if (closestRoom.bottom <= start.y && closestRoom.bottom > space.top) space.top = closestRoom.bottom;
                     }
                     colliding.Remove(closestRoom);
                 }
@@ -226,7 +209,7 @@ namespace Levels.Builders
             }
 
             //space checking
-            RectInt space = FindFreeSpace(start, collision, Math.Max(next.MaxWidth, next.MaxHeight));
+            Rectangle space = FindFreeSpace(start, collision, Math.Max(next.MaxWidth, next.MaxHeight));
             if (!next.SetSizeWithLimit(space.width + 1, space.height + 1))
             {
                 return -1;
@@ -236,31 +219,31 @@ namespace Levels.Builders
             Vector2 targetCenter = new();
             if (direction == Room.TOP)
             {
-                targetCenter.y = prev.top - (next.Height - 1) / 2f;
+                targetCenter.y = prev.top - (next.height - 1) / 2f;
                 targetCenter.x = (float)((targetCenter.y - b) / m);
-                next.SetPos((int)Math.Round(targetCenter.x - (next.Width - 1) / 2f ), prev.top - (next.Height - 1));
+                next.SetPos((int)Math.Round(targetCenter.x - (next.width - 1) / 2f ), prev.top - (next.height - 1));
 
             }
             else if (direction == Room.BOTTOM)
             {
-                targetCenter.y = prev.bottom + (next.Height - 1) / 2f;
+                targetCenter.y = prev.bottom + (next.height - 1) / 2f;
                 targetCenter.x = (float)((targetCenter.y - b) / m);
-                next.SetPos((int)Math.Round(targetCenter.x - (next.Width - 1) / 2f), prev.bottom);
+                next.SetPos((int)Math.Round(targetCenter.x - (next.width - 1) / 2f), prev.bottom);
 
             }
             else if (direction == Room.RIGHT)
             {
-                targetCenter.x = prev.right + (next.Width - 1) / 2f;
+                targetCenter.x = prev.right + (next.width - 1) / 2f;
                 targetCenter.y = (float)(m * targetCenter.x + b);
-                next.SetPos(prev.right, (int)Math.Round(targetCenter.y - (next.Height - 1) / 2f));
+                next.SetPos(prev.right, (int)Math.Round(targetCenter.y - (next.height - 1) / 2f));
 
 
             }
             else if (direction == Room.LEFT)
             {
-                targetCenter.x = prev.left - (next.Width - 1) / 2f;
+                targetCenter.x = prev.left - (next.width - 1) / 2f;
                 targetCenter.y = (float)(m * targetCenter.x + b);
-                next.SetPos(prev.left - (next.Width - 1), (int)Math.Round(targetCenter.y - (next.Height - 1) / 2f));
+                next.SetPos(prev.left - (next.width - 1), (int)Math.Round(targetCenter.y - (next.height - 1) / 2f));
 
             }
 
@@ -270,16 +253,16 @@ namespace Levels.Builders
                 if (next.right < prev.left + 2) next.Shift(prev.left + 2 - next.right, 0);
                 else if (next.left > prev.right - 2) next.Shift(prev.right - 2 - next.left, 0);
 
-                if (next.right > space.right()) next.Shift(space.right() - next.right, 0);
-                else if (next.left < space.left()) next.Shift(space.left() - next.left, 0);
+                if (next.right > space.right) next.Shift(space.right - next.right, 0);
+                else if (next.left < space.left) next.Shift(space.left - next.left, 0);
             }
             else
             {
                 if (next.bottom < prev.top + 2) next.Shift(0, prev.top + 2 - next.bottom);
                 else if (next.top > prev.bottom - 2) next.Shift(0, prev.bottom - 2 - next.top);
 
-                if (next.bottom > space.bottom()) next.Shift(0, space.bottom() - next.bottom);
-                else if (next.top < space.top()) next.Shift(0, space.top() - next.top);
+                if (next.bottom > space.bottom) next.Shift(0, space.bottom - next.bottom);
+                else if (next.top < space.top) next.Shift(0, space.top - next.top);
             }
 
             //attempt to connect, return the result angle if successful.

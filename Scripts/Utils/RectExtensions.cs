@@ -4,67 +4,7 @@ using System.Drawing;
 using UnityEngine;
 
 namespace Utils
-{
-    public static class RectIntExtensions
-    {
-        public static int left    (this RectInt r) => r.x;
-        public static int top     (this RectInt r) => r.y;
-        public static int right   (this RectInt r) => r.xMax;
-        public static int bottom  (this RectInt r) => r.yMax;
-
-        public static RectInt zero => new RectInt(0, 0, 0, 0);
-
-        public static bool Inside(this RectInt r, Vector2Int p)
-        {
-            return p.x >= r.x && p.x < r.xMax && p.y >= r.y && p.y < r.yMax;
-        }
-
-        public static RectInt Intersect(this RectInt r, RectInt other)
-        {
-            r.x     = Math.Max(r.x, other.x);
-            r.y     = Math.Max(r.y, other.y);
-            r.xMax  = Math.Min(r.xMax, other.xMax);
-            r.yMax  = Math.Min(r.yMax, other.yMax);
-
-            return r;
-        }
-
-        public static RectInt Set(this RectInt r, int x, int y, int width, int height)
-        {
-            r.x = x;
-            r.y = y;
-            r.width = width;
-            r.height = height;
-            return r;
-        }
-
-
-        public static RectInt Intersect(this RectInt r, Levels.Rooms.Room other)
-        {
-            r.x = Math.Max(r.x, other.left);
-            r.y = Math.Max(r.y, other.top);
-            r.xMax = Math.Min(r.xMax, other.right);
-            r.yMax = Math.Min(r.yMax, other.bottom);
-
-            return r;
-        }
-
-        public static RectInt Set(this RectInt rect, Levels.Rooms.Room r)
-        {
-            return rect.Set(r.left, r.top, r.right, r.bottom);
-        }
-
-        //Every unit point within the Rect
-        public static List<Vector2Int> GetPoints(this RectInt r)
-        {
-            List<Vector2Int> points = new List<Vector2Int>();
-            for (int i = r.x; i <= r.xMax; i++)
-                for (int j = r.y; j <= r.yMax; j++)
-                    points.Add(new Vector2Int(i, j));
-            return points;
-        }
-    }
-
+{ 
 
     public class Rectangle
     {
@@ -89,20 +29,10 @@ namespace Utils
             this.bottom = bottom;
         }
 
-        public int Width()
-        {
-            return right - left;
-        }
-
-        public int Depth()
-        {
-            return bottom - top;
-        }
-
-        public int Area()
-        {
-            return Width() * Depth();
-        }
+        public virtual int width => right - left;
+        public virtual int height => bottom - top;
+        public int area => width * height;
+        
 
         public Rectangle Set(int left, int top, int right, int bottom)
         {
@@ -118,12 +48,12 @@ namespace Utils
             return Set(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        public Rectangle SetPos(int x, int z) => Set(x, z, x + (right - left), z + (bottom - top));
+        public Rectangle SetPos(int x, int y) => Set(x, y, x + (right - left), y + (bottom - top));
 
-        public Rectangle Shift(int x, int z) => Set(left + x, top + z, right + x, bottom + z);
+        public Rectangle Shift(int x, int y) => Set(left + x, top + y, right + x, bottom + y);
 
         //USE xMax and yMax instead
-        //public Rectangle Resize(int w, int d) => Set(left, top, left + w, top + d);
+        public Rectangle Resize(int w, int h) => Set(left, top, left + w, top + h);
 
         public bool IsEmpty() => right <= left || bottom <= top;
 
@@ -133,7 +63,16 @@ namespace Utils
             return this;
         }
 
-        
+        public Rectangle Intersect(Rectangle other)
+        {
+            Rectangle r = new();
+            r.left = Math.Max(r.left, other.left);
+            r.top = Math.Max(r.top, other.top);
+            r.right = Math.Min(r.right, other.right);
+            r.bottom = Math.Min(r.bottom, other.bottom);
+
+            return r;
+        }
 
         public Rectangle Union(Rectangle other)
         {
@@ -147,11 +86,11 @@ namespace Utils
             return result;
         }
 
-        public Rectangle Union(int x, int z)
+        public Rectangle Union(int x, int y)
         {
             if (IsEmpty())
             {
-                return Set(x, z, x + 1, z + 1);
+                return Set(x, y, x + 1, y + 1);
             }
             else
             {
@@ -163,35 +102,34 @@ namespace Utils
                 {
                     right = x + 1;
                 }
-                if (z < top)
+                if (y < top)
                 {
-                    top = z;
+                    top = y;
                 }
-                else if (z >= bottom)
+                else if (y >= bottom)
                 {
-                    bottom = z + 1;
+                    bottom = y + 1;
                 }
                 return this;
             }
         }
 
-        public Rectangle Union(Vector3 p)
+        public Rectangle Union(Vector2Int p)
         {
-            return Union((int)p.x,(int)p.z);
+            return Union(p.x,p.y);
         }
 
-        public bool Inside(Vector3 p)
+        public bool Inside(Vector2Int p)
         {
             return p.x >= left && p.x < right && p.y >= top && p.y < bottom;
         }
 
-        public Vector3 Center()
+        public Vector2Int Center()
         {
-            return new Vector3
+            return new Vector2Int
                 (
-                    (float)(((left + right) / 2) + (((right - left) % 2) == 0 ? Utils.RandomNumberGenerator.Int(2) : 0)),
-                    0,
-                    (float)(((top + bottom) / 2) + (((bottom - top) % 2) == 0 ? Utils.RandomNumberGenerator.Int(2) : 0))
+                    (((left + right) / 2) + (((right - left) % 2) == 0 ? Utils.RandomNumberGenerator.Int(2) : 0)),
+                    (((top + bottom) / 2) + (((bottom - top) % 2) == 0 ? Utils.RandomNumberGenerator.Int(2) : 0))
                 );
         }
 
@@ -207,12 +145,12 @@ namespace Utils
 
         public Rectangle Scale(int d) => new Rectangle(left * d, top * d, right * d, bottom * d);
 
-        public List<Vector3> GetPoints()
+        public List<Vector2Int> GetPoints()
         {
-            List<Vector3> points = new List<Vector3>();
+            List<Vector2Int> points = new();
             for (int i = left; i <= right; i++)
                 for (int j = top; j <= bottom; j++)
-                    points.Add(new Vector3((float)i, 0 ,(float)j));
+                    points.Add(new Vector2Int(i, j));
             return points;
         }
 

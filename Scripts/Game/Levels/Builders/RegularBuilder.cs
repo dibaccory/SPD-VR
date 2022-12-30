@@ -74,7 +74,7 @@ namespace Levels.Builders
         {
             foreach (Room r in rooms)
             {
-                r.Zero();
+                r.SetEmpty();
             }
 
             entrance = exit = shop = null;

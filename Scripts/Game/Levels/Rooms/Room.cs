@@ -2,50 +2,30 @@
 using System.Collections.Generic;
 using TileInfo;
 using Levels.Painters;
-using System.Drawing;
-//using System.Drawing;
 using UnityEngine;
 using Utils;
 using DungeonInstance;
 
 namespace Levels.Rooms
 {
-    public abstract class Room
+    public abstract class Room : Rectangle
     {
         public List<Room> neighbors = new();
         public Dictionary<Room, Door> connected = new();
         public int distance;
         public int price = 1;
-        public int left, top, right, bottom;
-        public RectInt rect => new RectInt(left, top, Width, Height);
+        //public int left, top, right, bottom;
+        public Rectangle rect => new Rectangle(left, top, width, height);
 
         //+1 Because Rooms are inclusive to their right and bottom
-        public int Width { get => right - left + 1; set => Width = value; }
-        public int Height { get => bottom - top + 1; set => Height = value; }
-        public int Area => Width * Height;
+        public override int width => right - left + 1;
+        public override int height => bottom - top + 1;
+        //public override int Area => Width * height;
 
-        public Room() : this(RectIntExtensions.zero) { }
+        public Room() : base() { }
 
 
-        public Room(RectInt r)
-        {
-            left   = r.x;
-            top    = r.y;
-            right  = r.xMax;
-            bottom = r.yMax;
-        }
-
-        public Room Zero() => Set(0, 0, 0, 0);
-
-        public Room Set( int left, int top, int right, int bottom)
-        {
-            this.left = left;
-            this.top = top;
-            this.right = right;
-            this.bottom = bottom;
-
-            return this;
-        }
+        public Room(Rectangle r) : base(r) { }
 
         public Room Set(Room other)
         {
@@ -68,12 +48,6 @@ namespace Levels.Rooms
             return this;
         }
 
-        //TODO: consider making RoomUtils...?
-        public Room SetPos(int x, int z) => Set(x, z, x + (right - left), z + (bottom - top));
-
-        public Room Shift(int x, int z) => Set(left + x, top + z, right + x, bottom + z);
-
-
         // **** Spatial logic ****
 
         //Note: when overriding these YOU MUST store any randomly decided values.
@@ -84,17 +58,12 @@ namespace Levels.Rooms
         public virtual int MinHeight { get; private set; } = -1;
         public virtual int MaxHeight { get; private set; } = -1;
 
-        public bool IsEmpty => right <= left || bottom <= top;
-        
+       // public bool IsEmpty => right <= left || bottom <= top;
+
 
         public bool ForceSize(int w, int h)
         {
             return SetSize(w, w, h, h);
-        }
-
-        public Room Resize(int w, int h)
-        {
-            return Set(left, top, left+w, top+h);
         }
 
         public bool SetSize()
@@ -122,7 +91,7 @@ namespace Levels.Rooms
             }
         }
 
-        
+
 
         public bool SetSizeWithLimit(int w, int h)
         {
@@ -134,18 +103,13 @@ namespace Levels.Rooms
             {
                 SetSize();
 
-                if (Width > w || Height > h)
+                if (width > w || height > h)
                 {
-                    Resize(Math.Min(Width, w) - 1, Math.Min(Height, h) - 1);
+                    Resize(Math.Min(width, w) - 1, Math.Min(height, h) - 1);
                 }
 
                 return true;
             }
-        }
-
-        public bool Inside(Vector2Int p)
-        {
-            return p.x >= left && p.x < right && p.y >= top && p.y < bottom;
         }
 
         public Vector2Int PointInside(Vector2Int from, int n)
@@ -178,24 +142,26 @@ namespace Levels.Rooms
         public static readonly int RIGHT = 3;
         public static readonly int BOTTOM = 4;
 
-        //public RectInt ToRectInt(Room other)
+        //public Rectangle ToRectangle(Room other)
         //{
-        //   return 
+        //   return
         //        new this(
         //            Math.Max(left, other.left),
         //            Math.Max(top, other.top),
         //            Math.Min(right, other.right),
         //            Math.Min(bottom, other.bottom)
-        //        ); 
+        //        );
         //}
-        public List<Vector2Int> GetPoints()
-        {
-            List<Vector2Int> points = new List<Vector2Int>();
-            for (int i = (int)left; i <= right; i++)
-                for (int j = (int)top; j <= bottom; j++)
-                    points.Add(new Vector2Int(i, j));
-            return points;
-        }
+
+
+        //public List<Vector2Int> GetPoints()
+        //{
+        //    List<Vector2Int> points = new List<Vector2Int>();
+        //    for (int i = (int)left; i <= right; i++)
+        //        for (int j = (int)top; j <= bottom; j++)
+        //            points.Add(new Vector2Int(i, j));
+        //    return points;
+        //}
 
         public virtual int MinConnections(int direction) => Convert.ToInt32(direction == ALL);
 
@@ -211,11 +177,11 @@ namespace Levels.Rooms
                 int total = 0;
                 foreach (Room r in connected.Keys)
                 {
-                    RectInt i = new RectInt().Intersect(r);
-                    if      (direction == LEFT && i.width == 0 && i.x == left) total++;
-                    else if (direction == TOP && i.height == 0 && i.y == top) total++;
-                    else if (direction == RIGHT && i.width == 0 && i.xMax == right) total++;
-                    else if (direction == BOTTOM && i.height == 0 && i.yMax == bottom) total++;
+                    Rectangle i = new Rectangle(this).Intersect(r);
+                    if      (direction == LEFT && i.width == 0 && i.left == left) total++;
+                    else if (direction == TOP && i.height == 0 && i.top == top) total++;
+                    else if (direction == RIGHT && i.width == 0 && i.right == right) total++;
+                    else if (direction == BOTTOM && i.height == 0 && i.bottom == bottom) total++;
                 }
                 return total;
             }
@@ -249,7 +215,7 @@ namespace Levels.Rooms
         //considers both direction and point limits
         public bool CanConnect(Room r)
         {
-            RectInt i = new RectInt().Set(this).Intersect(r);
+            Rectangle i = new Rectangle().Set(this).Intersect(r);
 
             bool foundPoint = false;
             foreach(Vector2Int p in i.GetPoints())
@@ -262,10 +228,10 @@ namespace Levels.Rooms
             }
             if (!foundPoint) return false;
 
-            if (i.width == 0 && i.x == left)            return CanConnect(LEFT) && r.CanConnect(RIGHT);
-            else if (i.height == 0 && i.y == top)       return CanConnect(TOP) && r.CanConnect(BOTTOM);
-            else if (i.width == 0 && i.xMax == right)   return CanConnect(RIGHT) && r.CanConnect(LEFT);
-            else if (i.height == 0 && i.yMax == bottom) return CanConnect(BOTTOM) && r.CanConnect(TOP);
+            if (i.width == 0 && i.left == left)            return CanConnect(LEFT) && r.CanConnect(RIGHT);
+            else if (i.height == 0 && i.top == top)       return CanConnect(TOP) && r.CanConnect(BOTTOM);
+            else if (i.width == 0 && i.right == right)   return CanConnect(RIGHT) && r.CanConnect(LEFT);
+            else if (i.height == 0 && i.bottom == bottom) return CanConnect(BOTTOM) && r.CanConnect(TOP);
             else
                 return false;
         }
@@ -275,8 +241,8 @@ namespace Levels.Rooms
             return false;
         }
 
-        //TODO MAY NEED Merge to be RectInt
-        public void Merge(Level l, Room other, Room merge, Tile mergeTerrain)
+        //TODO MAY NEED Merge to be Rectangle
+        public void Merge(Level l, Room other, Rectangle merge, Tile mergeTerrain)
         {
             Painter.Fill(l, merge, mergeTerrain);
         }
@@ -286,7 +252,7 @@ namespace Levels.Rooms
             if (neighbors.Contains(other))
                 return true;
 
-            RectInt i = new RectInt().Intersect(other);
+            Rectangle i = new Rectangle().Intersect(other);
             if ((i.width == 0 && i.height >= 2) ||
                 (i.height == 0 && i.width >= 2))
             {
@@ -495,7 +461,7 @@ namespace Levels.Rooms
 
     }
 
-    
+
 
     public enum SizeCategory
     {

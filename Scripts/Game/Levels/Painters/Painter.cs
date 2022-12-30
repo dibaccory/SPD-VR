@@ -4,7 +4,7 @@ using Levels;
 using Newtonsoft.Json.Linq;
 using TileInfo;
 using Levels.Rooms;
-using System.Drawing;
+using Utils;
 using UnityEngine;
 
 namespace Levels.Painters
@@ -47,19 +47,19 @@ namespace Levels.Painters
             }
         }
 
-        public static void Fill(Level level, Room r, Tile value)
+        public static void Fill(Level level, Rectangle r, Tile value)
         {
-            Fill(level, r.left, r.top, r.Width, r.Height, value);
+            Fill(level, r.left, r.top, r.width, r.height, value);
         }
 
-        public static void Fill(Level level, Room r, int m, Tile value)
+        public static void Fill(Level level, Rectangle r, int m, Tile value)
         {
-            Fill(level, r.left + m, r.top + m, r.Width - m * 2, r.Height - m * 2, value);
+            Fill(level, r.left + m, r.top + m, r.width - m * 2, r.height - m * 2, value);
         }
 
-        public static void Fill(Level level, Room room, int l, int t, int r, int b, Tile value)
+        public static void Fill(Level level, Rectangle room, int l, int t, int r, int b, Tile value)
         {
-            Fill(level, room.left + l, room.top + t, room.Width - (l + r), room.Height - (t + b), value);
+            Fill(level, room.left + l, room.top + t, room.width - (l + r), room.height - (t + b), value);
         }
 
         public static void DrawLine(Level level, Vector2Int from, Vector2Int to, Tile value)

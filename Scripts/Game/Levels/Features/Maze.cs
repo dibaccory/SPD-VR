@@ -43,7 +43,7 @@ namespace Levels.Features
             return Generate(maze);
         }
 
-        public static bool[,] Generate(RectInt r) => Generate(r.width + 1, r.height + 1);
+        public static bool[,] Generate(Rectangle r) => Generate(r.width + 1, r.height + 1);
         public static bool[,] Generate(int w, int h)
         {
             width = w;

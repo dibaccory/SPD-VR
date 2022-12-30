@@ -12,7 +12,6 @@ using Levels.Rooms.Standard;
 using System.Net.Sockets;
 using Unity.VisualScripting;
 using UnityEditor;
-using System.Drawing;
 
 namespace Levels.Painters
 {
@@ -100,7 +99,7 @@ namespace Levels.Painters
 				Room.Door door = r.connected[n];
 				if (door == null)
 				{
-					RectInt i = r.rect.Intersect( n );
+					Rectangle i = r.rect.Intersect( n );
 					List<Vector2Int> doorSpots = new();
 					foreach(Vector2Int p in i.GetPoints())
 					{
@@ -267,30 +266,30 @@ namespace Levels.Painters
         protected bool mergeRooms(Level l, Room r, Room n, Vector2Int start, Tile mergeTerrain)
         {
 
-            RectInt intersect = r.rect.Intersect(n);
+            Rectangle intersect = r.rect.Intersect(n);
             if (intersect.width == 0)
             {
 
-                RectInt merge = new();
-                merge.x = merge.xMax = intersect.x;
-                merge.y = merge.yMax = start != null ? start.y : (int)intersect.center.y;
+                Rectangle merge = new();
+                merge.left = merge.right = intersect.left;
+                merge.top = merge.bottom = start != null ? start.y : intersect.Center().y;
 
-                Vector2Int p = new Vector2Int(merge.left(), merge.top());
-                while (merge.top() > intersect.top() && n.CanMerge(l, p, mergeTerrain) && r.CanMerge(l, p, mergeTerrain))
+                Vector2Int p = new Vector2Int(merge.left, merge.top);
+                while (merge.top > intersect.top && n.CanMerge(l, p, mergeTerrain) && r.CanMerge(l, p, mergeTerrain))
                 {
-                    merge.y--;
+                    merge.bottom--;
                     p.y--;
                 }
-                p.y = merge.bottom();
-                while (merge.bottom() < intersect.bottom() && n.CanMerge(l, p, mergeTerrain) && r.CanMerge(l, p, mergeTerrain))
+                p.y = merge.bottom;
+                while (merge.bottom < intersect.bottom && n.CanMerge(l, p, mergeTerrain) && r.CanMerge(l, p, mergeTerrain))
                 {
-                    merge.yMax++;
+                    merge.bottom++;
                     p.y++;
                 }
 
                 if (merge.height >= 3)
                 {
-                    r.Merge(l, n, new RectInt(merge.x, merge.y + 1, merge.x + 1, merge.height), mergeTerrain);
+                    r.Merge(l, n, new Rectangle(merge.left, merge.top + 1, merge.left + 1, merge.height), mergeTerrain);
                     return true;
                 }
                 else
@@ -302,11 +301,11 @@ namespace Levels.Painters
             else if (intersect.top == intersect.bottom)
             {
 
-                Rect merge = new Rect();
-                merge.left = merge.right = start != null ? start.x : intersect.center.x;
+                Rectangle merge = new();
+                merge.left = merge.right = start != null ? start.x : intersect.Center().x;
                 merge.top = merge.bottom = intersect.top;
 
-                Point p = new Point(merge.left, merge.top);
+                Vector2Int p = new(merge.left, merge.top);
                 while (merge.left > intersect.left && n.CanMerge(l, p, mergeTerrain) && r.CanMerge(l, p, mergeTerrain))
                 {
                     merge.left--;
@@ -321,7 +320,7 @@ namespace Levels.Painters
 
                 if (merge.width >= 3)
                 {
-                    r.merge(l, n, new Rect(merge.left + 1, merge.top, merge.right, merge.top + 1), mergeTerrain);
+                    r.Merge(l, n, new Rectangle(merge.left + 1, merge.top, merge.right, merge.top + 1), mergeTerrain);
                     return true;
                 }
                 else
