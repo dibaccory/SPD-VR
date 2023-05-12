@@ -252,7 +252,7 @@ namespace Levels.Rooms
             if (neighbors.Contains(other))
                 return true;
 
-            Rectangle i = new Rectangle().Intersect(other);
+            Rectangle i = Intersect(other);
             if ((i.width == 0 && i.height >= 2) ||
                 (i.height == 0 && i.width >= 2))
             {

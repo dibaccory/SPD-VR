@@ -5,6 +5,7 @@ using Levels.Rooms.Standard;
 using Levels.Builders;
 using Levels.Painters;
 using Utils;
+using DungeonInstance;
 
 namespace Levels
 {
@@ -94,6 +95,21 @@ namespace Levels
       	}
 
         protected abstract Painter Painter();
+
+        protected int nTraps()
+        {
+            return RandomNumberGenerator.NormalIntRange(2, 3 + (Dungeon.depth / 5));
+        }
+
+        //protected T[] trapClasses() where T : Trap
+        //{
+        //    return new T[] { WornDartTrap.class};
+        //}
+
+        //protected float[] trapChances()
+        //{
+        //    return new float[] { 1 };
+        //}
 
         protected virtual int StandardRooms(bool forceMax) { return 0; }
 

@@ -25,9 +25,9 @@ namespace Levels
 		protected override Painter Painter()
 		{
 			return new SewerPainter()
-					.setWater(feeling == Feeling.WATER ? 0.85f : 0.30f, 5)
-					.setGrass(feeling == Feeling.GRASS ? 0.80f : 0.20f, 4)
-					.setTraps(nTraps(), trapClasses(), trapChances());
+					.SetWater(feeling == Feeling.WATER ? 0.85f : 0.30f, 5)
+					.SetGrass(feeling == Feeling.GRASS ? 0.80f : 0.20f, 4);
+					//.SetTraps(nTraps(), trapClasses(), trapChances());
 		}
 
 	}

@@ -250,19 +250,19 @@ namespace Levels.Builders
             //perform connection bounds and target checking, move the room if necessary
             if (direction == Room.TOP || direction == Room.BOTTOM)
             {
-                if (next.right < prev.left + 2) next.Shift(prev.left + 2 - next.right, 0);
-                else if (next.left > prev.right - 2) next.Shift(prev.right - 2 - next.left, 0);
+                if (next.right < prev.left + 2)         next.Shift(prev.left + 2 - next.right, 0);
+                else if (next.left > prev.right - 2)    next.Shift(prev.right - 2 - next.left, 0);
 
-                if (next.right > space.right) next.Shift(space.right - next.right, 0);
-                else if (next.left < space.left) next.Shift(space.left - next.left, 0);
+                if (next.right > space.right)           next.Shift(space.right - next.right, 0);
+                else if (next.left < space.left)        next.Shift(space.left - next.left, 0);
             }
             else
             {
-                if (next.bottom < prev.top + 2) next.Shift(0, prev.top + 2 - next.bottom);
-                else if (next.top > prev.bottom - 2) next.Shift(0, prev.bottom - 2 - next.top);
+                if (next.bottom < prev.top + 2)         next.Shift(0, prev.top + 2 - next.bottom);
+                else if (next.top > prev.bottom - 2)    next.Shift(0, prev.bottom - 2 - next.top);
 
-                if (next.bottom > space.bottom) next.Shift(0, space.bottom - next.bottom);
-                else if (next.top < space.top) next.Shift(0, space.top - next.top);
+                if (next.bottom > space.bottom)         next.Shift(0, space.bottom - next.bottom);
+                else if (next.top < space.top)          next.Shift(0, space.top - next.top);
             }
 
             //attempt to connect, return the result angle if successful.

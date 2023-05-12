@@ -104,10 +104,11 @@ namespace Levels.Builders
 
             while (roomsOnMainPath > 0 && multiConnections.Count > 0)
             {
+                int pp = 4;
                 Room r = multiConnections.First();
                 multiConnections.RemoveAt(0);
-                Type rType = r.GetType();
-                if (rType.IsInstanceOfType(typeof(StandardRoom)))
+                //Type rType = r.GetType();
+                if (r is StandardRoom)
                 {
                     roomsOnMainPath -= (int)((StandardRoom)r).sizeCat;
                 }

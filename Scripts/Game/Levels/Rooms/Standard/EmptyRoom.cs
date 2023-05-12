@@ -8,10 +8,6 @@ namespace Levels.Rooms.Standard
 {
 	public class EmptyRoom : StandardRoom
 	{
-		public EmptyRoom()
-		{
-			
-		}
 
         public override void Paint(Level level)
         {

@@ -166,8 +166,6 @@ MonoBehaviour:
   company: Unity
   priority: 0
   required: 0
-  targetQuest: 1
-  targetQuest2: 1
 --- !u!114 &-7752338077703016340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,8 +186,6 @@ MonoBehaviour:
   company: Unity
   priority: 0
   required: 0
-  targetQuest: 1
-  targetQuest2: 1
 --- !u!114 &-6972551045068313342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,8 +271,6 @@ MonoBehaviour:
   company: 
   priority: 0
   required: 0
-  targetQuest: 1
-  targetQuest2: 1
 --- !u!114 &-6121312019783512864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,8 +291,6 @@ MonoBehaviour:
   company: 
   priority: 0
   required: 0
-  targetQuest: 1
-  targetQuest2: 1
 --- !u!114 &-5941725581135416239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +432,21 @@ MonoBehaviour:
   company: Unity
   priority: 0
   required: 0
+--- !u!114 &-3783201580125100814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5a1f07dc5afe854f9f12a4194aca3fb, type: 3}
+  m_Name: iPhone
+  m_EditorClassIdentifier: 
+  features: []
+  m_renderMode: 1
+  m_depthSubmissionMode: 0
 --- !u!114 &-2814057175233876366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,11 +643,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0ebc320a151d3408ea1e9fce54d40e, type: 3}
   m_Name: Open XR Package Settings
   m_EditorClassIdentifier: 
-  Keys: 010000000d00000007000000
+  Keys: 010000000d0000000700000004000000
   Values:
   - {fileID: -6972551045068313342}
   - {fileID: 9010559802970704989}
   - {fileID: 1857087764707268582}
+  - {fileID: -3783201580125100814}
 --- !u!114 &154189092879288027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,8 +731,6 @@ MonoBehaviour:
   company: 
   priority: 0
   required: 0
-  targetQuest: 1
-  targetQuest2: 1
 --- !u!114 &1357996348947090559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -802,7 +808,6 @@ MonoBehaviour:
   - {fileID: 5965970239883709019}
   - {fileID: -2814057175233876366}
   - {fileID: -3904128865168053844}
-  - {fileID: 8429583519476594621}
   - {fileID: -7826790271427300440}
   - {fileID: -6476851776102465482}
   - {fileID: 629739752137190889}
@@ -906,7 +911,7 @@ MonoBehaviour:
   nameUi: Mock Runtime
   version: 0.0.2
   featureIdInternal: com.unity.openxr.feature.mockruntime
-  openxrExtensionStrings: XR_UNITY_null_gfx XR_UNITY_android_present
+  openxrExtensionStrings: XR_UNITY_null_gfx
   company: Unity
   priority: 0
   required: 0
@@ -1135,8 +1140,6 @@ MonoBehaviour:
   company: 
   priority: 0
   required: 0
-  targetQuest: 1
-  targetQuest2: 1
 --- !u!114 &7413458854745118488
 MonoBehaviour:
   m_ObjectHideFlags: 0

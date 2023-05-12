@@ -9,15 +9,50 @@ using Levels.Rooms.Connection;
 using DungeonInstance;
 using TileInfo;
 using Levels.Rooms.Standard;
-using System.Net.Sockets;
 using Unity.VisualScripting;
 using UnityEditor;
+using TMPro;
+using UnityEngine.UIElements;
 
 namespace Levels.Painters
 {
 
     public abstract class RegularPainter : Painter
     {
+
+        private float waterFill = 0f;
+        private int waterSmoothness;
+
+        public RegularPainter SetWater(float fill, int smoothness)
+        {
+            waterFill = fill;
+            waterSmoothness = smoothness;
+            return this;
+        }
+
+        private float grassFill = 0f;
+        private int grassSmoothness;
+
+        public RegularPainter SetGrass(float fill, int smoothness)
+        {
+            grassFill = fill;
+            grassSmoothness = smoothness;
+            return this;
+        }
+
+        private int nTraps = 0;
+        private Type[] trapClasses;
+        private float[] trapChances;
+
+        public RegularPainter SetTraps<T>(int num, T[] classes, float[] chances) //where T : Trap
+        {
+            nTraps = num;
+            trapClasses = classes as Type[];
+            trapChances = chances;
+            return this;
+        }
+
+
         public override bool Paint(Level level, List<Room> rooms)
 		{
 		
@@ -74,16 +109,16 @@ namespace Levels.Painters
 			PaintDoors( level, rooms );
 		
 			if (waterFill > 0f) {
-				PaintWater( level, rooms );
+				//PaintWater( level, rooms );
 			}
 		
 			if (grassFill > 0f){
-				PaintGrass( level, rooms );
+				//PaintGrass( level, rooms );
 			}
 		
-			if (nTraps > 0){
-				PaintTraps( level, rooms );
-			}
+			//if (nTraps > 0){
+			//	PaintTraps( level, rooms );
+			//}
 		
 			Decorate( level, rooms );
 		
@@ -150,7 +185,7 @@ namespace Levels.Painters
                         continue;
                     }
                     else if (!roomMerges.ContainsKey(r) && !roomMerges.ContainsKey(n) &&
-                            MergeRooms(l, r, n, r.connected[n], Tile.Empty))
+                            MergeRooms(l, r, n, r.connected[n].pos, Tile.Empty))
                     {
                         if (((StandardRoom)r).sizeCat == SizeCategory.Normal) roomMerges.Add(r, n);
                         if (((StandardRoom)n).sizeCat == SizeCategory.Normal) roomMerges.Add(n, r);
@@ -263,7 +298,7 @@ namespace Levels.Painters
 			}
 		}
 
-        protected bool mergeRooms(Level l, Room r, Room n, Vector2Int start, Tile mergeTerrain)
+        protected bool MergeRooms(Level l, Room r, Room n, Vector2Int start, Tile mergeTerrain)
         {
 
             Rectangle intersect = r.rect.Intersect(n);
@@ -334,6 +369,173 @@ namespace Levels.Painters
             }
 
         }
+
+        //protected void PaintWater(Level l, List<Room> rooms)
+        //{
+        //    bool[] lake = Patch.Generate(l.Width, l.Height, waterFill, waterSmoothness, true);
+
+        //    if (rooms.Count != 0)
+        //    {
+        //        foreach(Room r in rooms)
+        //        {
+        //            foreach(Vector2Int p in r.WaterPlaceablePoints())
+        //            {
+        //                int i = l.XYToCell(p);
+        //                if (lake[i] && l.map[i] == Tile.Empty)
+        //                {
+        //                    l.map[i] = Tile.Water;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < l.Length; i++)
+        //        {
+        //            if (lake[i] && l.map[i] == Tile.Empty)
+        //            {
+        //                l.map[i] = Tile.Water;
+        //            }
+        //        }
+        //    }
+
+        //}
+
+        //protected void PaintGrass(Level l, List<Room> rooms)
+        //{
+        //    bool[] grass = Patch.generate(l.Width, l.Height, grassFill, grassSmoothness, true);
+
+        //    List<Int32> grassCells = new();
+
+        //    if (rooms.Count == 0)
+        //    {
+        //        foreach(Room r in rooms)
+        //        {
+        //            foreach(Vector2Int p in r.GrassPlaceablePoints())
+        //            {
+        //                int i = l.XYToCell(p);
+        //                if (grass[i] && l.map[i] == Tile.Empty)
+        //                {
+        //                    grassCells.Add(i);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < l.Length; i++)
+        //        {
+        //            if (grass[i] && l.map[i] == Tile.Empty)
+        //            {
+        //                grassCells.Add(i);
+        //            }
+        //        }
+        //    }
+
+        //    //Adds chaos to grass height distribution. Ratio of high grass depends on fill and smoothing
+        //    //Full range is 8.3% to 75%, but most commonly (20% fill with 3 smoothing) is around 60%
+        //    //low smoothing, or very low fill, will begin to push the ratio down, normally to 50-30%
+        //    foreach(int i in grassCells)
+        //    {
+        //        //TODO
+        //        //if (l.Heaps[i] != null || l.FindMob(i) != null)
+        //        //{
+        //        //    l.map[i] = Tile.Grass;
+        //        //    continue;
+        //        //}
+
+        //        int count = 1;
+        //        foreach(int n in PathFinder.NEIGHBOURS8)
+        //        {
+        //            if (grass[i + n])
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //        l.map[i] = (RandomNumberGenerator.Double() < count / 12f) ? Tile.HighGrass : Tile.Grass;
+        //    }
+        //}
+
+        //protected void paintTraps(Level l, List<Room> rooms)
+        //{
+        //    List<int> validCells = new();
+
+        //    if (rooms.Count != 0)
+        //    {
+        //        foreach(Room r in rooms)
+        //        {
+        //            foreach(Vector2Int p in r.TrapPlaceablePoints())
+        //            {
+        //                int i = l.XYToCell(p);
+        //                if (l.map[i] == Tile.Empty)
+        //                {
+        //                    validCells.Add(i);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < l.Length; i++)
+        //        {
+        //            if (l.map[i] == Tile.Empty)
+        //            {
+        //                validCells.Add(i);
+        //            }
+        //        }
+        //    }
+
+        //    //no more than one trap every 5 valid tiles.
+        //    nTraps = Math.Min(nTraps, validCells.Count / 5);
+
+        //    //for traps that want to avoid being in hallways
+        //    List<int> validNonHallways = new();
+
+        //    //temporarily use the passable array for the next step
+        //    for (int i = 0; i < l.Length; i++)
+        //    {
+        //        l.passable[i] = (TileInfo.Terrain.flags[l.map[i]] & TileFlags.Passable) != 0;
+        //    }
+
+        //    for (int i : validCells)
+        //    {
+        //        if ((l.passable[i + PathFinder.CIRCLE4[0]] || l.passable[i + PathFinder.CIRCLE4[2]])
+        //                && (l.passable[i + PathFinder.CIRCLE4[1]] || l.passable[i + PathFinder.CIRCLE4[3]]))
+        //        {
+        //            validNonHallways.Add(i);
+        //        }
+        //    }
+
+        //    //no more than one trap every 5 valid tiles.
+        //    nTraps = Math.Min(nTraps, validCells.Count / 5);
+
+        //    //5x traps on traps level feeling, but the extra traps are all visible
+        //    for (int i = 0; i < (l.feeling == Level.Feeling.TRAPS ? 5 * nTraps : nTraps); i++)
+        //    {
+
+        //        Trap trap = Reflection.newInstance(trapClasses[RandomNumberGenerator.Chances(trapChances)]);
+
+        //        int trapPos;
+        //        if (trap.avoidsHallways && validNonHallways.Count != 0)
+        //        {
+        //            trapPos = RandomNumberGenerator.Element(validNonHallways);
+        //        }
+        //        else
+        //        {
+        //            trapPos = RandomNumberGenerator.Element(validCells);
+        //        }
+        //        //removes the integer object, not at the index
+        //        validCells.Remove(trapPos);
+        //        validNonHallways.Remove(trapPos);
+
+        //        if (i < nTraps) trap.hide();
+        //        else trap.reveal();
+
+        //        l.SetTrap(trap, trapPos);
+        //        //some traps will not be hidden
+        //        l.map[trapPos] = trap.visible ? Tile.Trap : Tile.SecretTrap;
+        //    }
+        //}
 
     }
 

@@ -20,8 +20,8 @@ namespace Levels.Features
 
         public static bool[,] Generate(Room r)
         {
-            width = r.Width;
-            height = r.Height;
+            width = r.width;
+            height = r.height;
             bool[,] maze = new bool[width,height];
             for (int x = 0; x < width; x++)
             {
@@ -94,7 +94,7 @@ namespace Levels.Features
 
         public static bool[,] Generate(Room r, Tile[] terrain, int width, Tile filledTerrainType)
         {
-            bool[,] maze = new bool[r.Width,r.Height];
+            bool[,] maze = new bool[r.width,r.height];
             //Fill edges of Maze Room
             for (int x = 0; x < width; x++)
             {

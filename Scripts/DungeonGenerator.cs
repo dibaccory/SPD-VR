@@ -17,7 +17,7 @@ public class DungeonGenerator : MonoBehaviour
         Console.WriteLine("did we get here ");
         dungeon = new();
 
-        Console.WriteLine(dungeon.level.map);
+        //Console.WriteLine(dungeon.level.map);
     }
 
 }
